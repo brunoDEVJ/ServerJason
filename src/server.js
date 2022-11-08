@@ -7,7 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(router)
 
-app.listen(process.env.PORT || 3001, (erro) => {
+app.listen(process.env.PORT || 8096, (erro) => {
   if (erro) {
       return console.log(erro)
   }
