@@ -7,6 +7,9 @@ const app = express()
 app.use(express.json())
 app.use(router)
 
-app.listen(3030, () => {
-  console.log("rodando na porta 3030")
-});
+app.listen(process.env.PORT || 3001, (erro) => {
+  if (erro) {
+      return console.log(erro)
+  }
+  console.log("tudo funcionando")
+}) 
