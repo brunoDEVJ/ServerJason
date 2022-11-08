@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model conexoestabela {
+  CONEXOESTABELA_ID Int     @id @default(autoincrement())
+  NOMETABELA        String  @unique(map: "NOMETABELA_UNIQUE") @db.VarChar(100)
+  CODEMP            Int
+  UP                String? @db.VarChar(1)
+  DOWN              String? @db.VarChar(1)
+  NUMTERMINAL       Int?
+  BCOINSERT         Int?
+  BCOUPDATE         Int?
+  BCODELETE         Int?
+}
+
+model empresa {
+  EMPRESA_ID   Int    @id @default(0)
+  NOME_EMPRESA String @db.VarChar(255)
+}
+
+model grupoproduto {
+  GRUPO_PRODUTO_ID      Int       @id @default(autoincrement())
+  DESCRICAO             String    @unique @db.VarChar(50)
+  MARGEMMINIMA          Float?
+  MARGEMMAXIMA          Float?
+  ATIVO                 String?   @db.Char(1)
+  PERCENTUAL_MARKUP     Float?
+  VENDEDOR_ALTERA_PRECO String?   @default("N") @db.VarChar(1)
+  CODEMP                Int
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
+  DATAALTERACAO         DateTime? @db.Date
+}
+
+model numseq {
+  NOMETABELA   String  @id @db.VarChar(30)
+  NUMSEQTABELA Int
+  CODEMP       Int
+  FLGLOG       String? @db.Char(1)
+}
