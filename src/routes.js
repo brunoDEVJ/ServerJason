@@ -1,17 +1,37 @@
 import { Router } from "express";
+import conexoesTabelaController from "./controllers/conexoesTabelaController.js";
 import gpcontroller from "./controllers/gpcontroller.js";
 
 const router = Router();
+/*GRUPO PRODUTO*/
+router.get(
+  "/sync/insert/grupoproduto/:cntinsert/:codemp",
+  gpcontroller.getTableInsert
+);
+router.get(
+  "/sync/update/grupoproduto/:cntupdate/:codemp",
+  gpcontroller.getTableUpdate
+);
+router.post("/grupoproduto", gpcontroller.postTable)
+/*GRUPO PRODUTO*/
 
-router.get("/sync/insert/list/:terminal/:codemp", gpcontroller.getList)
-router.get("/sync/insert/table/:table/:cntinsert/:codemp",gpcontroller.getTable)
-// router.get("/sync/insert/clearsync/:table/:terminal/:codemp",gpcontroller.createGP)
-
-
-
-// router.get("/sync/update/list/:terminal/:codemp",gpcontroller.createGP)
-// router.get("/sync/update/table/:table/:cntupdate/:codemp",gpcontroller.createGP)
-// router.get("/sync/update/clearsync/:table/:terminal/:codemp",gpcontroller.createGP)
-
+/*CONEXÕES TABELA*/
+router.get(
+  "/sync/insert/list/:terminal/:codemp",
+  conexoesTabelaController.getListInsert
+);
+router.get(
+  "/sync/insert/cleansync/:table/:cntinsert/:terminal/:codemp",
+  conexoesTabelaController.clearSyncInsert
+);
+router.get(
+  "/sync/update/list/:terminal/:codemp",
+  conexoesTabelaController.getListUpdate
+);
+router.get(
+  "/sync/update/cleansync/:table/:cntupdate/:terminal/:codemp",
+  conexoesTabelaController.clearSyncUpdate
+);
+/*CONEXÕES TABELA*/
 
 export { router };

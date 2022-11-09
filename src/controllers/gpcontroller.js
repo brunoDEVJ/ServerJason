@@ -3,39 +3,50 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default {
- 
-  async getList(req, res) {
+  async getTableInsert(req, res) {
     try {
-      const {terminal, codemp} = req.params
+      let { cntinsert, codemp } = req.params;
 
-      const cxtb = await prisma.$queryRaw`
-      SELECT NOMETABELA, BANCOINSERT
-      from conexoestabela
-      where CODEMP = ${codemp}
-      and (TERMINALINSERT & ${terminal} ) = 0`;
-
-      res.send(cxtb);
+      const tb = await prisma.$queryRaw`
+    select * from  grupoproduto
+    where cntinsert > ${cntinsert}
+    and codemp = ${codemp}`;
+      res.send(tb);
+      
     } catch (error) {
       console.log(error);
     }
   },
 
-async getTable(req, res) {
-  try {
+  async getTableUpdate(req, res) {
+    try {
+      let { cntupdate, codemp } = req.params;
 
-    let {table,cntinsert,codemp} = req.params
-    let a = table.toLowerCase()
+      const tb = await prisma.$queryRaw`
+    select * from  grupoproduto
+    where cntupdate > ${cntupdate}
+    and codemp = ${codemp}`;
 
-    const tb = await prisma.$queryRaw`
-    select * from  ${a}
-    where cntinsert > ${cntinsert}
-    and codemp = ${codemp}`
-    
-    res.send(console.log(tb))
+      res.send(tb);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
-  } catch (error) {
-    console.log(error);
-  }
-}
+  async postTable(req, res) {
+    try {
+      let { DESCRICAO, CODEMP } = req.body;
+
+      let cGrupoProduto = await prisma.grupoproduto.create({
+        data: {
+          DESCRICAO,
+          CODEMP,
+        },
+      });
+
+      res.send(cGrupoProduto);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
-
