@@ -13,10 +13,12 @@ model conexoestabela {
   CODEMP            Int
   UP                String? @db.VarChar(1)
   DOWN              String? @db.VarChar(1)
-  NUMTERMINAL       Int?
-  BCOINSERT         Int?
-  BCOUPDATE         Int?
-  BCODELETE         Int?
+  TERMINALINSERT    Int?    @default(0)
+  TERMINALUPDATE    Int?    @default(0)
+  TERMINALDELETE    Int?    @default(0)
+  BANCOINSERT       Int?    @default(0)
+  BANCOUPDATE       Int?    @default(0)
+  BANCODELETE       Int?    @default(0)
 }
 
 model empresa {
@@ -43,4 +45,24 @@ model numseq {
   NUMSEQTABELA Int
   CODEMP       Int
   FLGLOG       String? @db.Char(1)
+}
+
+model bairro {
+  BAIRRO_ID     Int
+  NOME_BAI      String    @db.VarChar(30)
+  CNTINSERT     Int?      @default(0)
+  CNTUPDATE     Int?      @default(0)
+  DATAALTERACAO DateTime? @db.Date
+  CODEMP        Int?      @default(1)
+
+  @@id([BAIRRO_ID, NOME_BAI])
+}
+
+model mapaatualizacoes {
+  MAPA_DELETE_ID Int       @id @default(autoincrement())
+  TABELA         String    @db.VarChar(45)
+  CNTINSERT      Int?      @default(-1)
+  CMD            String?   @db.VarChar(45)
+  CODEMP         Int       @default(1)
+  DATAALTERACAO  DateTime? @db.Date
 }
