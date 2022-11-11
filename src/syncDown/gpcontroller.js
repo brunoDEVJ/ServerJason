@@ -8,13 +8,15 @@ export default {
       let { cntinsert, codemp } = req.params;
 
       const tb = await prisma.$queryRaw`
-    select * from  grupoproduto
-    where cntinsert > ${cntinsert}
-    and codemp = ${codemp}`;
-      res.send(tb);
-      
+        select * from  grupoproduto
+        where cntinsert > ${cntinsert}
+        and codemp = ${codemp}`;
+      if (tb.length > 0) res.send(tb);
+      else {
+        res.json({ status: 201, message: "sem pendencias" });
+      }
     } catch (error) {
-      console.log(error);
+      res.json({ status: 202, message: "erro" });
     }
   },
 
@@ -23,16 +25,20 @@ export default {
       let { cntupdate, codemp } = req.params;
 
       const tb = await prisma.$queryRaw`
-    select * from  grupoproduto
-    where cntupdate > ${cntupdate}
-    and codemp = ${codemp}`;
-
-      res.send(tb);
+        select * from  grupoproduto
+        where cntupdate > ${cntupdate}
+        and codemp = ${codemp}`;
+      if (tb.length > 0) res.send(tb);
+      else {
+        res.json({ status: 201, message: "sem pendencias" });
+      }
     } catch (error) {
-      console.log(error);
+      res.json({ status: 202, message: "erro" });
     }
   },
 
+
+  /*********************************************************/
   async postTable(req, res) {
     try {
       let { DESCRICAO, CODEMP } = req.body;

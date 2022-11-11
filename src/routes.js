@@ -1,8 +1,9 @@
 import { Router } from "express";
-import bairroController from "./syncControllers/bairroController.js";
-import conexoesTabelaController from "./syncControllers/conexoesTabelaController.js";
-import gpcontroller from "./syncControllers/gpcontroller.js";
-import mapaatualizacoesController from "./syncControllers/mapaatualizacoesController.js";
+import bairroController from "./syncUp/pedidoController.js";
+import conexoesTabelaController from "./syncDown/conexoesTabelaController.js";
+import gpcontroller from "./syncDown/gpcontroller.js";
+import mapaatualizacoesController from "./syncDown/mapaatualizacoesController.js";
+import pedidoController from "./syncUp/pedidoController.js";
 
 const router = Router();
 
@@ -14,10 +15,6 @@ router.get(
 
 /*MAPA ATUALIZAÇÕES*/
 
-
-
-
-
 /*GRUPO PRODUTO*/
 router.get(
   "/sync/insert/grupoproduto/:cntinsert/:codemp",
@@ -27,9 +24,8 @@ router.get(
   "/sync/update/grupoproduto/:cntupdate/:codemp",
   gpcontroller.getTableUpdate
 );
-
-
-router.post("/grupoproduto", gpcontroller.postTable)
+/************************************************************** */
+router.post("/grupoproduto", gpcontroller.postTable);
 /*GRUPO PRODUTO*/
 
 /*CONEXÕES TABELA*/
@@ -52,13 +48,8 @@ router.get(
 
 /*CONEXÕES TABELA*/
 
-
-
 /*BAIRRO*/
-router.post('/sync/insert/bairro', bairroController.postBairro)
+router.post("/sync/insert/bairro", pedidoController.postPedido);
 /*BAIRRO*/
-
-
-
 
 export { router };

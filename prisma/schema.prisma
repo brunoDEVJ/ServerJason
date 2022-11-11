@@ -52,7 +52,7 @@ model bairro {
   NOME_BAI      String    @db.VarChar(30)
   CNTINSERT     Int?      @default(0)
   CNTUPDATE     Int?      @default(0)
-  DATAALTERACAO DateTime? @db.Date
+  DATAALTERACAO DateTime? @db.DateTime(0)
   CODEMP        Int?      @default(1)
 
   @@id([BAIRRO_ID, NOME_BAI])
@@ -65,4 +65,349 @@ model mapaatualizacoes {
   CMD            String?   @db.VarChar(45)
   CODEMP         Int       @default(1)
   DATAALTERACAO  DateTime? @db.Date
+}
+
+model contasreceber {
+  RECEBIMENTO_ID   Int?      @default(0)
+  CLASSIFICACAO_ID String    @db.VarChar(1)
+  DOCUMENTO_ID     Int?      @default(0)
+  PARCELA_ID       Int       @default(0)
+  CLIENTE_ID       Int?      @default(0)
+  NUMERO_PEDIDO_ID Int       @default(0)
+  NOTA_FISCAL_ID   Int?      @default(0)
+  NUMERO_CUPOM     Int?
+  NOME             String    @db.VarChar(50)
+  OBSERVACAO       String?   @db.VarChar(255)
+  VALORDOCUMENTO   Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  EMPRESA_ID       Int?      @default(1)
+  CHAVEIMPORTACAO  String    @db.VarChar(100)
+  CODEMP           Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
+  DATAALTERACAO    DateTime? @db.Date
+
+  @@id([NUMERO_PEDIDO_ID, PARCELA_ID, CHAVEIMPORTACAO])
+}
+
+model contasreceberitens {
+  CONTASRECEBERITENS_ID  Int       @id @default(0)
+  RECEBIMENTO_ID         Int?      @default(0)
+  FORMA_PAGTO_ID         Int?      @default(0)
+  CONTA_BANCARIA_ID      Int?      @default(0)
+  CENTRO_CUSTO           Int?
+  HISTORICO_BAIXA_ID     Int?
+  CONTA_CORRENTE_ID      Int?
+  DATA_EMISSAO           DateTime? @db.Date
+  DATA_VENCIMENTO        DateTime? @db.Date
+  DATA_RECEBIMENTO       DateTime? @db.Date
+  DATA_LANCAMENTO        DateTime? @db.Date
+  VALOR_DOCUMENTO        Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_ACRESCIMO        Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_DESCONTO         Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_RECEBIDO         Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  TIPO_COBRANCA          Int?      @default(0)
+  DUPLICATA              Int?
+  NUMERO_BORDERAUX       Int?      @default(0)
+  DUPLICATA_EMITIDA      String?   @db.Char(1)
+  BANCO                  Int?      @default(0)
+  AGENCIA                Int?      @default(0)
+  NUMERO_CONTA           String?   @db.VarChar(9)
+  NUMERO_CHEQUE          Int?      @default(0)
+  NOME_CLIENTE           String    @db.VarChar(50)
+  NOME_CARTAO            String?   @db.VarChar(20)
+  NUMERO_CARTAO          String?   @db.VarChar(20)
+  NOSSO_NUMERO           String?   @db.VarChar(20)
+  VENDEDOR_ID            Int
+  BASECOMISSAO           Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALORCOMISSAO          Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  PERCENTUALCOMISSAO     Decimal?  @default(0.0000) @db.Decimal(9, 4)
+  DEVOLVIDO              String    @db.VarChar(1)
+  OBSERVACOES            String?   @db.VarChar(255)
+  DATA_VENCIMENTO_CHEQUE DateTime? @db.Date
+  DATA_BAIXA_CHEQUE      DateTime? @db.Date
+  DATA_EMISSAO_CHEQUE    DateTime? @db.Date
+  USUARIO                String?   @db.VarChar(20)
+  CAIXA_DIARIO_CODAIXA   Int?      @default(0)
+  CHAVEIMPORTACAO        String?   @db.VarChar(100)
+  CODEMP                 Int?
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
+  DATAALTERACAO          DateTime? @db.Date
+  CODTIPOREC             Int?
+  VALOR_TROCO            Decimal?  @db.Decimal(15, 2)
+}
+
+model nfce {
+  CODNFCE         Int
+  PEDIDO_ID       Int       @default(0)
+  SEQNFCE         Int
+  NUMERO          Int?
+  SERIE           String?   @db.VarChar(3)
+  MODELO          String?   @db.VarChar(2)
+  TITULODAV       String?   @db.VarChar(50)
+  VALOR           Decimal?  @db.Decimal(15, 2)
+  CHNFCE          String?   @db.VarChar(50)
+  NFCEPROTOCOLO   String?   @db.VarChar(20)
+  DATAHORARECIBO  DateTime? @db.Date
+  COO             Int?
+  FLGLOG          String?   @db.VarChar(1)
+  DATAALTERACAO   DateTime? @db.Date
+  CODEMP          Int?
+  LOTENFCE        Int?
+  JUSTIFICATIVA   String?   @db.VarChar(255)
+  CONTINGENCIA    String?   @db.Char(1)
+  LOG             String?   @db.VarChar(2)
+  CORRECAOTAG     String?   @db.VarChar(1)
+  TIPO            String?   @db.VarChar(1)
+  CAMINHONOTA     String?   @db.VarChar(800)
+  CNF             Int?
+  REGPOST         String?   @db.Char(1)
+  SERIENFCE       Int?
+  OPERACAONFCE    Int?
+  XMLEVENTO       String?   @db.VarChar(50)
+  CHAVEIMPORTACAO String    @db.VarChar(100)
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
+
+  @@id([CHAVEIMPORTACAO, SEQNFCE, PEDIDO_ID])
+}
+
+model pedido {
+  PEDIDO_ID                     Int       @id @default(0)
+  TIPO_MOVIMENTO                Int?      @default(0)
+  VENDEDOR_ID                   Int?      @default(0)
+  CLIENTE_ID                    Int?      @default(0)
+  CLIENTE_ID_ENTREGA            Int?      @default(0)
+  CLIENTE_ID_COBRANCA           Int?      @default(0)
+  CONDICOES_PAGAMENTO_ID        Int?      @default(0)
+  TRANSPORTADOR_ID              Int?      @default(0)
+  ROTA_ID                       Int?      @default(0)
+  FORMA_PAGAMENTO_ID            Int?      @default(0)
+  NUMERO_ROMANEIO               Int?      @default(0)
+  USUARIO_LIBEROU_SR            Int?      @default(0)
+  NR_ORDEM_CARREGAMENTO         Int?      @default(0)
+  CONFERENTE                    Int?      @default(0)
+  NUMERO_PEDIDO_ORIGEM          Int?      @default(0)
+  NUMERO_CUPOM                  Int?      @default(0)
+  NOTA_FISCAL_ID                Int?      @default(0)
+  PEDIDOSITUACAO                Int?
+  REDUCAO                       Float?
+  COMISSAO_PEDIDO               Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  PESO_BRUTO                    Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  PESO_LIQUIDO                  Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_PRODUTOS                Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_SERVICOS                Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_LIQUIDO                 Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_OUTRAS                  Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_DESCONTO_GLOBAL         Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_DESCONTO_ITENS          Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_FRETE                   Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_IPI                     Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_SUBSTITUICAO_TRIBUTARIA Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_PIS                     Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_COFINS                  Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_CONTRIBUICAO_SOCIAL     Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_PEDIDO                  Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  DATA_PEDIDO                   DateTime? @db.Date
+  DATA_HORA_DIGITACAO           DateTime? @db.Date
+  DATA_ENTREGA                  DateTime? @db.Date
+  DATA_FATURAMENTO              DateTime? @db.Date
+  DATA_CONFERENCIA              DateTime? @db.Date
+  DATA_LIBERACAO_SR             DateTime? @db.Date
+  DATACANCELAMENTONOTAFISCAL    DateTime? @db.Date
+  DATASAIDA                     DateTime? @db.Date
+  TIPO_ENTREGA                  String?   @db.VarChar(1)
+  NOME                          String    @db.VarChar(50)
+  EMITIDO                       String?   @db.Char(1)
+  ROMANEIO_FINALIZADO           String?   @db.VarChar(1)
+  PEDIDO_LIBERADO_SR            String?   @db.VarChar(1)
+  PEDIDOLIBERADOLIMITECREDIDO   String?   @db.VarChar(1)
+  ETIQUETA_IMPRESSA             String?   @db.VarChar(1)
+  USUARIO                       String    @db.VarChar(20)
+  NUMERO_CONTRATO               String?   @db.VarChar(50)
+  MOTORISTA                     String?   @db.VarChar(50)
+  AJUDANTE                      String?   @db.VarChar(50)
+  RESPONSAVELFRETE              String?   @db.VarChar(1)
+  SERIE                         String?   @db.VarChar(2)
+  VOLUMES                       String?   @db.VarChar(10)
+  ESPECIE                       String?   @db.VarChar(20)
+  MARCA                         String?   @db.VarChar(10)
+  PLACA                         String?   @db.VarChar(8)
+  UFPLACA                       String?   @db.VarChar(2)
+  INFCOMPLLINHA01               String?   @db.VarChar(50)
+  INFCOMPLLINHA02               String?   @db.VarChar(50)
+  INFCOMPLLINHA03               String?   @db.VarChar(50)
+  INFCOMPLLINHA04               String?   @db.VarChar(50)
+  INFCOMPLLINHA05               String?   @db.VarChar(50)
+  INFCOMPLLINHA06               String?   @db.VarChar(50)
+  OBSERVACOES                   Bytes?    @db.TinyBlob
+  MOTIVOCANCELAMENTONOTAFISCAL  Bytes?    @db.TinyBlob
+  VENDEDOR_CLIENTE_ID           Int       @default(1)
+  EMPRESA_ID                    Int?      @default(1)
+  CHAVE_NFE                     String?   @db.VarChar(44)
+  INCORPORAFRETEICMS            String?   @default("N") @db.VarChar(1)
+  QUANTIDADEITENS               Float?    @default(0)
+  INFCOMPLLINHA07               String?   @db.VarChar(50)
+  INFCOMPLLINHA08               String?   @db.VarChar(50)
+  INFCOMPLLINHA09               String?   @db.VarChar(50)
+  INFCOMPLLINHA10               String?   @db.VarChar(50)
+  VENDEDOR_PREPOSTO_ID          Int?      @default(0)
+  COMISSAO_VENDEDOR_PREPOSTO_ID Float?    @default(0)
+  INFCOMPLLINHA11               String?   @db.VarChar(50)
+  INFCOMPLLINHA12               String?   @db.VarChar(50)
+  INFCOMPLLINHA13               String?   @db.VarChar(50)
+  INFCOMPLLINHA14               String?   @db.VarChar(50)
+  INFCOMPLLINHA15               String?   @db.VarChar(50)
+  INFCOMPLLINHA16               String?   @db.VarChar(50)
+  INFCOMPLLINHA17               String?   @db.VarChar(50)
+  INFCOMPLLINHA18               String?   @db.VarChar(50)
+  INFCOMPLLINHA19               String?   @db.VarChar(50)
+  INFCOMPLLINHA20               String?   @db.VarChar(50)
+  LOGDAV_ID                     Int?      @default(0)
+  NUMERO_DAV                    String?   @db.VarChar(14)
+  CLIENTEENDERECOS_ID           Int?      @default(0)
+  DESPESASACESSORIAS            Float?    @default(0)
+  LOJISTA_ID                    Int?      @default(0)
+  COMISSAO_LOJISTA              Float?    @default(0)
+  KIT_ID                        Int?
+  NUMERO_COO                    Int?      @default(0)
+  NUMERO_ECF                    String?   @db.VarChar(3)
+  CPF_OU_CNPJ                   String?   @db.VarChar(14)
+  CAIXA_DIARIO_CODAIXA          Int
+  RECEBIDO_A_PRAZO              String?   @db.Char(1)
+  TIPO_NFCE                     String?   @db.Char(1)
+  HORA_PEDIDO                   DateTime? @db.Date
+  TROCO                         Decimal?  @db.Decimal(15, 2)
+  VALOR_PAGO                    Decimal?  @db.Decimal(15, 2)
+  CHAVEIMPORTACAO               String?   @db.VarChar(100)
+  PEDIDO_ENTRADA_ID             Int?      @default(0)
+  OBSERVACAO                    String?   @db.VarChar(5000)
+  IMPRESSAO_PEDIDO              Bytes?    @db.Blob
+  TIPODOCUMENTO                 Int?
+  DATAMOVIMENTO                 DateTime? @db.Date
+  CODEMP                        Int?
+  CNTINSERT                     Int?
+  CNTUPDATE                     Int?
+  DATAALTERACAO                 DateTime? @db.Date
+  RETERVALORISS                 String?   @default("N") @db.VarChar(1)
+  NUMNFSE                       String?   @db.VarChar(20)
+}
+
+model pedidoformapagamento {
+  PEDIDOFORMAPAGAMENTO_ID   Int       @id
+  PEDIDO_ID                 Int?
+  FORMAPAGAMENTO            String?   @db.VarChar(100)
+  VALOR                     Float?
+  PARCELAS                  Int       @default(0)
+  DIAS_VENCIMENTO           Int       @default(0)
+  FORMA_PAGAMENTO_ID        Int?      @default(0)
+  BAIXA_AUTOMATICA          String?   @db.VarChar(1)
+  NUMLOTECARTAO             String?   @db.VarChar(100)
+  CHAVEIMPORTACAO           String?   @db.VarChar(100)
+  CNPJREQUIRENTE            String?   @db.VarChar(15)
+  EXECUTATEF                String    @default("N") @db.Char(1)
+  SEQPAG                    Int?
+  TAXAJUROS                 Decimal?  @default(0.0000) @db.Decimal(9, 4)
+  DIVIDIDOEMQUANTASPARCELAS Int?
+  VALORPARCELADIVIDA        Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  CODEMP                    Int?
+  CNTINSERT                 Int?
+  CNTUPDATE                 Int?
+  DATAALTERACAO             DateTime? @db.Date
+  EMITIR_PROMISSORIA        String?   @default("N") @db.VarChar(1)
+}
+
+model pedidoitens {
+  PEDIDO_ITENS_ID       Int       @id @default(0)
+  PEDIDO_ID             Int?      @default(0)
+  PRODUTO_ID            Int?      @default(0)
+  DESCONTO_ID           Int?      @default(0)
+  NOTA_FISCAL_ID        Int?      @default(0)
+  PERCENTUAL_COMISSAO   Decimal?  @default(0.0000) @db.Decimal(9, 4)
+  QUANTIDADE1           Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  QUANTIDADE2           Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_UNITARIO        Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_DESCONTO        Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  TOTAL_DESCONTO        Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_BRUTO           Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_TOTAL           Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  PESO_LIQUIDO          Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  PESO_BRUTO            Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  VALOR_QUILO           Float?
+  PRECO_VENDA           Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  BASE_IPI              Float?
+  VALOR_IPI             Float?
+  BASE_ICMS             Float?
+  VALOR_ICMS            Float?
+  BASE_ICMS_SUB         Float?
+  VALOR_ICMS_SUB        Float?
+  ALIQUOTA_ICMS         Float?
+  ALIQUOTA_IPI          Float?
+  VALOR_KG_FRETE        Float?
+  VALOR_FRETE           Float?
+  REDUCAO               Float?
+  VALOR_COMISSAO        Float?
+  REDUCAO_FORA_UF       Float?
+  REDUCAO_DENTRO_UF     Float?
+  MVA                   Float?
+  ALIQUOTA_PIS          Float?
+  ALIQUOTA_COFINS       Float?
+  PRECO_CUSTO           Float?
+  UNIDADE_MEDIDA        String?   @db.VarChar(2)
+  SITUACAO              String?   @db.VarChar(1)
+  REDUCAO_COMISSAO      String?   @db.VarChar(1)
+  INCORPORA_IPI         String?   @db.VarChar(1)
+  ITEM_LIBERADO         String?   @db.VarChar(1)
+  MAISMENOSESTOQUE      String?   @db.VarChar(1)
+  CLASSIFICACAO_FISCAL  String?   @db.VarChar(2)
+  CST                   String?   @db.VarChar(3)
+  CODIGO_FISCAL         String?   @db.VarChar(15)
+  CFOP                  String?   @db.VarChar(4)
+  CODIGO_PRODUTO        String    @db.VarChar(16)
+  DESCRICAO             String    @db.VarChar(50)
+  DESCRICAO_CONTINUACAO String?   @db.VarChar(50)
+  NUMERO_LOTE           String?   @db.VarChar(14)
+  ALTURA                Float?    @default(0)
+  LARGURA               Float?    @default(0)
+  COMPRIMENTO           Float?    @default(0)
+  TOTALAXLXC            Float?    @default(0)
+  CODIGOTABELAPRECO     String?   @db.VarChar(14)
+  PRECOVENDATABELAPRECO Float?    @default(0)
+  INCORPORAIPIBASEICMS  String?   @default("N") @db.VarChar(1)
+  DESPESASACESSORIAS    Float?    @default(0)
+  ENTREGA               String?   @default("N") @db.VarChar(1)
+  CIMENTO_S_N           String?   @default("N") @db.VarChar(1)
+  KIT_ID                Int?
+  QUANT_ITENS_PENDENTE  Decimal?  @default(0.00000) @db.Decimal(15, 5)
+  NUMERO_DAV            Int?      @default(0)
+  DATA_INCLUSAO         DateTime? @db.Date
+  ORDEM                 Int?      @default(0)
+  VALOR_ACRESCIMO       Float?    @default(0)
+  BASE_PIS              Decimal?  @db.Decimal(15, 2)
+  VALOR_PIS             Decimal?  @db.Decimal(15, 2)
+  BASE_COFINS           Decimal?  @db.Decimal(15, 2)
+  VALOR_COFINS          Decimal?  @db.Decimal(15, 2)
+  CST_PIS               String?   @db.VarChar(2)
+  CST_COFINS            String?   @db.VarChar(2)
+  SEQITEM               Int?
+  CST_IPI               String?   @db.VarChar(2)
+  CODIGO_BARRAS         String?   @db.VarChar(14)
+  IMPOSTOEST            Decimal?  @db.Decimal(15, 2)
+  IMPOSTOFED            Decimal?  @db.Decimal(15, 2)
+  CHAVEIMPORTACAO       String?   @db.VarChar(100)
+  VALOR_DESCONTOITEM    Decimal?  @db.Decimal(15, 2)
+  VALOR_ACRESCIMOITEM   Decimal?  @db.Decimal(15, 2)
+  PONTOSPREMIA          Decimal?  @db.Decimal(15, 2)
+  DESCRICAOITENNOTA     String?   @db.VarChar(100)
+  REFERENCIA            String?   @db.VarChar(50)
+  CTRLIMPRESSAO         String?   @db.VarChar(1)
+  DATAVALIDADELOTE      DateTime? @db.Date
+  ITEMCOMPLEMENTO       String?   @db.VarChar(1)
+  CODEMP                Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
+  DATAALTERACAO         DateTime? @db.Date
+  ALIQUOTA_ST           Float?
+  DATAFABRICACAOLOTE    DateTime? @db.Date
+  QTDPRODUTOLOTE        Decimal?  @db.Decimal(15, 5)
 }
