@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 export default {
   async postPedido(req, res) {
     try {
-      let pedidos = req.body;
+      let bairros  = req.body;
       bairros.forEach(async (bairro) => {
         bairro.BAIRRO_ID,
           bairro.NOME_BAI,
@@ -30,7 +30,7 @@ export default {
           +seconds
         );
         try {
-          await prisma.pedido.create({
+          await prisma.bairro.create({
             data: {
               BAIRRO_ID: parseInt(bairro.BAIRRO_ID, 10),
               NOME_BAI: bairro.NOME_BAI,
@@ -44,15 +44,15 @@ export default {
             status: 200,
             message: "ok",
           });
+      console.log(bairros)
+
         } catch (error) {
           res.json({ status: 250, message: error.meta.target });
-          console.log("caiu no catch de dentro");
         }
       });
-      console.log(pedidos)
     } catch (error) {
-      res.json({ status: 202, message: "erro!" });
-      console.log("caiu no catch de dentro");
+      console.log(error)
+      res.json({ status: 202, message: error });
     }
   },
 };
