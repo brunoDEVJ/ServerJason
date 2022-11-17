@@ -1,87 +1,123 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+import converterData from "../utils/convertData.js";
 
 export default {
   async postPedido(req, res) {
     try {
-      let bairros  = req.body;
-      bairros.forEach(async (bairro) => {
-        bairro.BAIRRO_ID,
-          bairro.NOME_BAI,
-          bairro.CODEMP,
-          bairro.CNTINSERT,
-          bairro.CNTUPDATE,
-          bairro.DATAALTERACAO;
+      const jarray = req.body;
 
-        const str = bairro.DATAALTERACAO;
+      const tabelas = await prisma.$queryRaw`
+          select * from bairro
+          where bairro.BAIRRO_ID = -1`;
 
-        const [dateValues, timeValues] = str.split(" ");
+      const fTabelas = await prisma.$queryRaw`
+        desc bairro`;
 
-        const [day, month, year] = dateValues.split("/");
-        const [hours, minutes, seconds] = timeValues.split(":");
+      jarray.forEach(async (element) => {
+        let campo = Object.keys(element);
+        let value = Object.values(element);
+        let j;
 
-        const date = new Date(
-          +year,
-          +month - 1,
-          +day,
-          +hours - 3,
-          +minutes,
-          +seconds
-        );
+        for (let contField = 0; contField < campo.length; contField++) {
+          j = 0;
+          for (let i = 0; i < fTabelas.length; i++) {
+            if (fTabelas[i].Field === campo[contField]) {
+              break;
+            }
+            j++;
+          }
+
+          if (campo[contField] === "DATAALTERACAO") {
+            value[contField] = converterData(value[contField]);
+          } else if (fTabelas[j].Type === "int") {
+            value[contField] = parseInt(value[contField]);
+          }
+          tabelas[campo[contField]] = value[contField];
+        }
         try {
           await prisma.bairro.create({
             data: {
-              BAIRRO_ID: parseInt(bairro.BAIRRO_ID, 10),
-              NOME_BAI: bairro.NOME_BAI,
-              CNTINSERT: parseInt(bairro.CNTINSERT, 10),
-              CNTUPDATE: parseInt(bairro.CNTUPDATE, 10),
-              DATAALTERACAO: date,
-              CODEMP: parseInt(bairro.CODEMP, 10),
+              ...tabelas,
             },
           });
+
           res.json({
             status: 200,
             message: "ok",
           });
-      console.log(bairros)
-
         } catch (error) {
-          res.json({ status: 250, message: error.meta.target });
+          res.json({
+            status: 250,
+            message: error,
+          });
         }
       });
     } catch (error) {
-      console.log(error)
+      res.json({ status: 202, message: error });
+    }
+  },
+
+  async UpdatePedido(req, res) {
+    try {
+      const jarray = req.body;
+
+      const tabelas = await prisma.$queryRaw`
+          select * from bairro
+          where bairro.BAIRRO_ID = -1`;
+
+      const fTabelas = await prisma.$queryRaw`
+        desc bairro`;
+
+      jarray.forEach(async (element) => {
+        let campo = Object.keys(element);
+        let value = Object.values(element);
+        let j;
+
+        for (let contField = 0; contField < campo.length; contField++) {
+          j = 0;
+          for (let i = 0; i < fTabelas.length; i++) {
+            if (fTabelas[i].Field === campo[contField]) {
+              break;
+            }
+            j++;
+          }
+
+          if (campo[contField] === "DATAALTERACAO") {
+            value[contField] = converterData(value[contField]);
+          } else if (fTabelas[j].Type === "int") {
+            value[contField] = parseInt(value[contField]);
+          }
+          tabelas[campo[contField]] = value[contField];
+        }
+
+        try {
+          await prisma.bairro.updateMany({
+            where: {
+              BAIRRO_ID: tabelas.BAIRRO_ID,
+              NOME_BAI: tabelas.NOME_BAI
+            },
+            data: {
+              ...tabelas,
+            }
+          });
+
+          res.json({
+            status: 200,
+            message: "ok",
+          });
+        } catch (error) {
+          console.log(error)
+          res.json({
+            status: 203,
+            message: error,
+          });
+        }
+      });
+    } catch (error) {
       res.json({ status: 202, message: error });
     }
   },
 };
 
-
-
-// [
-// 	{
-// 	"BAIRRO_ID": "2",
-// 	"NOME_BAI": "Tedf2s3te 03",
-// 	"CODEMP":"1",
-// 	"CNTINSERT": "5",
-// 	"CNTUPDATE": "0",
-// 	"DATAALTERACAO": "24/00/2022 07:30:14"
-// 	},
-// 	{
-// 	"BAIRRO_ID": "2",
-// 	"NOME_BAI": "Tedf2s3te 03",
-// 	"CODEMP":"1",
-// 	"CNTINSERT": "5",
-// 	"CNTUPDATE": "0",
-// 	"DATAALTERACAO": "24/00/2022 07:30:14"
-// 	},
-// 	{
-// 	"BAIRRO_ID": "2",
-// 	"NOME_BAI": "Tedf2s3te 03",
-// 	"CODEMP":"1",
-// 	"CNTINSERT": "5",
-// 	"CNTUPDATE": "0",
-// 	"DATAALTERACAO": "24/00/2022 07:30:14"
-// 	}
-// ]

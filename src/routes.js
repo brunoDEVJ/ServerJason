@@ -50,6 +50,7 @@ router.get(
 
 /*BAIRRO*/
 router.post("/sync/insert/bairro", pedidoController.postPedido);
+router.put("/sync/update/bairro", pedidoController.UpdatePedido);
 /*BAIRRO*/
 
 export { router };
