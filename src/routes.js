@@ -1,9 +1,10 @@
 import { Router } from "express";
-import bairroController from "./syncUp/pedidoController.js";
+
 import conexoesTabelaController from "./syncDown/conexoesTabelaController.js";
 import gpcontroller from "./syncDown/gpcontroller.js";
 import mapaatualizacoesController from "./syncDown/mapaatualizacoesController.js";
 import pedidoController from "./syncUp/pedidoController.js";
+import pedidoControllers from "./syncUp/pedidoControllerteste.js";
 
 const router = Router();
 
@@ -49,8 +50,9 @@ router.get(
 /*CONEXÕES TABELA*/
 
 /*BAIRRO*/
-router.post("/sync/insert/bairro", pedidoController.postPedido);
-router.put("/sync/update/bairro", pedidoController.UpdatePedido);
+router.post("/sync/insert/:tabela", pedidoController.postPedido);
+router.put("/sync/update/:tabela", pedidoController.UpdatePedido);
+router.put("/sync/updates/:tabela", pedidoControllers.UpdatePedidos);
 /*BAIRRO*/
 
 export { router };

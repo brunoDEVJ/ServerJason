@@ -13,11 +13,12 @@ export default {
         where CODEMP = ${codemp}
         and (TERMINALINSERT & ${terminal} ) = 0`;
 
-      if (cxtb.length > 0) res.send(tb);
+      if (cxtb.length > 0) res.send(cxtb);
       else {
         res.json({ status: 201, message: "sem pendencias" });
       }
     } catch (error) {
+      console.log(error)
       res.json({ status: 202, message: "erro" });
     }
   },
@@ -64,8 +65,11 @@ export default {
         from conexoestabela
         where CODEMP = ${codemp}
         and (TERMINALUPDATE & ${terminal} ) = 0`;
+        
+      if(cxtb.length > 0) res.send(cxtb) 
       res.send({ status: 201, message: "sem pendencias" });
     } catch (error) {
+      console.log(error)
       res.json({ status: 202, message: "erro" });
     }
   },

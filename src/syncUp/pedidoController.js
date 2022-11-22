@@ -7,13 +7,13 @@ export default {
   async postPedido(req, res) {
     try {
       const jarray = req.body;
+      const nomeTabela = req.params;
+      const tabelas = await prisma.$queryRawUnsafe(`
+          select * from ${nomeTabela.tabela} C
+          where C.CODEMP = -1`);
 
-      const tabelas = await prisma.$queryRaw`
-          select * from bairro
-          where bairro.BAIRRO_ID = -1`;
-
-      const fTabelas = await prisma.$queryRaw`
-        desc bairro`;
+      const fTabelas = await prisma.$queryRawUnsafe(`
+        desc ${nomeTabela.tabela}`);
 
       jarray.forEach(async (element) => {
         let campo = Object.keys(element);
@@ -62,62 +62,106 @@ export default {
   async UpdatePedido(req, res) {
     try {
       const jarray = req.body;
+      const nomeTabela = req.params;
+      let up = {};
+      let feito = true;
 
-      const tabelas = await prisma.$queryRaw`
-          select * from bairro
-          where bairro.BAIRRO_ID = -1`;
+      const tabelas = await prisma.$queryRawUnsafe(`
+      select * from ${nomeTabela.tabela} C
+      where C.CODEMP = -1`);
 
-      const fTabelas = await prisma.$queryRaw`
-        desc bairro`;
+      const fTabelas = await prisma.$queryRawUnsafe(`
+        desc ${nomeTabela.tabela}`);
 
-      jarray.forEach(async (element) => {
-        let campo = Object.keys(element);
-        let value = Object.values(element);
-        let j;
+      let priKey = [];
+      let auxPri;
 
-        for (let contField = 0; contField < campo.length; contField++) {
-          j = 0;
-          for (let i = 0; i < fTabelas.length; i++) {
-            if (fTabelas[i].Field === campo[contField]) {
-              break;
+      
+        jarray.forEach(async (element) => {
+          let campo = Object.keys(element);
+          let value = Object.values(element);
+          let j;
+
+          for (let contField = 0; contField < campo.length; contField++) {
+            j = 0;
+
+            for (let i = 0; i < fTabelas.length; i++) {
+              if (fTabelas[i].Field === campo[contField]) break;
+              j++;
             }
-            j++;
+
+            if (fTabelas[j].Type === "int") {
+              value[contField] = parseInt(value[contField]);
+            } else if (campo[contField] === "DATAALTERACAO") {
+              value[contField] = converterData(value[contField]);
+            }
+            if (fTabelas[j].Key === "PRI") {
+              auxPri = {
+                [fTabelas[j].Field]: value[contField],
+              };
+              priKey = Object.assign(priKey, auxPri);
+            }
+
+            tabelas[campo[contField]] = value[contField];
           }
 
-          if (campo[contField] === "DATAALTERACAO") {
-            value[contField] = converterData(value[contField]);
-          } else if (fTabelas[j].Type === "int") {
-            value[contField] = parseInt(value[contField]);
+          try {
+            up = await prisma.bairro.updateMany({
+              where: {
+                ...priKey,
+              },
+              data: {
+                ...tabelas,
+              },
+            });
+            if (up.count === 0) feito = false;
+          } catch (error) {
+            console.log(error);
+            res.json({
+              status: 203,
+              message: error,
+            });
           }
-          tabelas[campo[contField]] = value[contField];
-        }
+        });
 
-        try {
-          await prisma.bairro.updateMany({
-            where: {
-              BAIRRO_ID: tabelas.BAIRRO_ID,
-              NOME_BAI: tabelas.NOME_BAI
-            },
-            data: {
-              ...tabelas,
-            }
-          });
+        
+      // let d = 0;
+      // while (up.count === undefined) {
+      //   console.log("fora do timeout")
+      //   console.log(up.count)
+      //   setTimeout(() => {
+      //       console.log("feito");
+      //     if (feito) {
+      //       res.json({
+      //         status: 200,
+      //         message: "ok",
+      //       });
+      //     } else
+      //       res.json({
+      //         status: 204,
+      //         message: feito,
+      //       });
+      //   }, 5);
+      //   d++
+      //   if(d>10000)
+      //   break;
+      //   console.log(d)
+      //   console.log(up.count)
+      // }
 
-          res.json({
-            status: 200,
-            message: "ok",
-          });
-        } catch (error) {
-          console.log(error)
-          res.json({
-            status: 203,
-            message: error,
-          });
-        }
-      });
+      // if (feito) {
+      //   res.json({
+      //     status: 200,
+      //     message: "ok",
+      //   });
+      // } else
+      //   res.json({
+      //     status: 204,
+      //     message: feito,
+      //   });
     } catch (error) {
+      console.log(error);
       res.json({ status: 202, message: error });
     }
   },
 };
-

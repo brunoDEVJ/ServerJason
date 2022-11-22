@@ -16,6 +16,7 @@ export default {
         res.json({ status: 201, message: "sem pendencias" });
       }
     } catch (error) {
+      console.log(error)
       res.json({ status: 202, message: "erro" });
     }
   },
