@@ -6,114 +6,90 @@ import converterData from "../utils/convertData.js";
 export default {
   async UpdatePedidos(req, res) {
     const jarray = req.body;
-    const nomeTabela = req.params;
-    let priCampo = [];
-    let priValue = [];
-    // let objPriKey = {};
-
-    const fTabelas = await prisma.$queryRawUnsafe(`
-        desc ${nomeTabela.tabela}`);
-
-    jarray.forEach((element) => {
-      let campo = Object.keys(element);
-      let value = Object.values(element);
-      let j;
-
-      for (let contField = 0; contField < campo.length; contField++) {
-        j = 0;
-
-        for (let i = 0; i < fTabelas.length; i++) {
-          if (fTabelas[i].Field === campo[contField]) break;
-          j++;
+    let nomeTabela = req.params["tabela"];
+    let lwhere = "";
+    let contObj = 0;
+    let maxContObj = jarray.length;
+    let objTabela = 0;
+    let up;
+    let lup = true;
+    let descTabela = await prisma.$queryRawUnsafe(`
+    desc ${nomeTabela}`);
+    let fTabelas =
+      await prisma.$queryRawUnsafe(`SELECT  k.column_name as campoPriKey
+    FROM information_schema.table_constraints t
+    JOIN information_schema.key_column_usage k
+    USING(constraint_name,table_schema,table_name)
+    WHERE t.constraint_type='PRIMARY KEY'
+    and t.table_name = '${nomeTabela}'`);
+    let priKey = [];
+    jarray.forEach((obj) => {
+      lwhere = lwhere + "(";
+      let auxauxPri = {};
+      for (let i = 0; i < fTabelas.length; i++) {
+        let auxPri = {};
+        let campo = fTabelas[i]["campoPriKey"];
+        let valor = obj[campo];
+        if (descTabela[i].Type === "int") {
+          valor = parseInt(valor);
         }
-
-        if (fTabelas[j].Key === "PRI") {
-          priCampo[contField] = fTabelas[j].Field;
-          // priValue.push(value[contField]);
-          priValue[contField] = [value[j]];
-        }
+        lwhere = lwhere + `(${campo}='${valor}')`;
+        if (i == fTabelas.length - 1) {
+          lwhere = lwhere + ")";
+        } else lwhere = lwhere + "and";
+        auxPri = { [campo]: valor };
+        auxauxPri = Object.assign(auxauxPri, auxPri);
       }
-    });
-    // 
-    
-
-    // let testarr = ["BAIRRO_ID","NOME_BAI"]
-    // let value = [1, 2];
-    // let capus = ["GERAL", "teste 02"];
-    // let testa = {
-    //   BAIRRO_ID: { in: value },
-    //   NOME_BAI: { in: capus },
-    // };
-
-    // console.log(testar[0].BAIRRO_ID)
-    let queryFind = `
-    select * from ${nomeTabela.tabela} c
-    where c.bairro_id in (1,2)
-    and c.nome_bai in ('GERAL', 'teste 02')
-    `
-    const tabelas = await prisma.$queryRawUnsafe(queryFind)
-    console.log(tabelas)
-
-    jarray.forEach((element) => {
-      let campo = Object.keys(element);
-      let value = Object.values(element);
-      let j;
-
-      for (let contField = 0; contField < campo.length; contField++) {
-        j = 0;
-
-        for (let i = 0; i < fTabelas.length; i++) {
-          if (fTabelas[i].Field === campo[contField]) break;
-          j++;
-        }
-
-        if (fTabelas[j].Type === "int") {
-          value[contField] = parseInt(value[contField]);
-        } else if (campo[contField] === "DATAALTERACAO") {
-          value[contField] = converterData(value[contField]);
-        }
+      priKey.push(auxauxPri);
+      if (contObj < maxContObj - 1) {
+        lwhere = lwhere + "or";
       }
+      contObj++;
     });
-
-    up = prisma.bairro
-      .updateMany({
-        where: {
-          // BAIRRO_ID: data[i].BAIRRO_ID,
-          // NOME_BAI: data[i].NOME_BAI,
-        },
-        // data: data[i],
+    await prisma
+      .$queryRawUnsafe(`select * from ${nomeTabela} where ${lwhere}`)
+      .then(async (tabelas) => {
+        jarray.forEach((element) => {
+          let campo = Object.keys(element);
+          let value = Object.values(element);
+          let j;
+          for (let contField = 0; contField < campo.length; contField++) {
+            j = 0;
+            for (let i = 0; i < descTabela.length; i++) {
+              if (descTabela[i].Field === campo[contField]) break;
+              j++;
+            }
+            if (descTabela[j].Type === "int") {
+              value[contField] = parseInt(value[contField]);
+            } else if (campo[contField] === "DATAALTERACAO") {
+              value[contField] = converterData(value[contField]);
+            }
+            tabelas[objTabela][campo[contField]] = value[contField];
+          }
+          objTabela++;
+        });
+        for (let i = 0; i < jarray.length; i++) {
+          up = await prisma.bairro.updateMany({
+            where: priKey[i],
+            data: tabelas[i],
+          });
+          if (up.count === 0) lup = false;
+        }
+        return lup;
       })
-      .then((data) => {
-        res.send("final");
+      .then((lup) => {
+        if (lup) res.json({
+          status: 200,
+          message: "ok",
+        });
+        else res.json({
+          status: 201,
+          message: "sem pendencias",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.send("msg:" + err);
       });
-    //   data[0].CNTINSERT = 10;
-    //   data[1].CNTINSERT = 15;
-    //   return data;
-    // })
-    // .then((data) => {
-    //   let up;
-    //   let lup = true;
-
-    //   for (let i = 0; i < 2; i++) {
-    //     up = prisma.bairro.updateMany({
-    //       where: {
-    //         BAIRRO_ID: data[i].BAIRRO_ID,
-    //         NOME_BAI: data[i].NOME_BAI,
-    //       },
-    //       data: data[i],
-    //     });
-    //     if (up.count === 0) lup = false;
-    //   }
-    //   return lup;
-    // })
-    // .then((data) => {
-    //   console.log(data);
-    //   if (data) res.send("alterações concluidas");
-    //   else res.send("n");
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    //   res.send("msg:" + err);
-    // });
   },
 };

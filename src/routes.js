@@ -51,8 +51,8 @@ router.get(
 
 /*BAIRRO*/
 router.post("/sync/insert/:tabela", pedidoController.postPedido);
-router.put("/sync/update/:tabela", pedidoController.UpdatePedido);
-router.put("/sync/updates/:tabela", pedidoControllers.UpdatePedidos);
+// router.put("/sync/update/:tabela", pedidoController.UpdatePedido);
+router.put("/sync/update/:tabela", pedidoControllers.UpdatePedidos);
 /*BAIRRO*/
 
 export { router };
