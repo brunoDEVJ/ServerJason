@@ -3,7 +3,7 @@ import { Router } from "express";
 import conexoesTabelaController from "./syncDown/conexoesTabelaController.js";
 import gpcontroller from "./syncDown/gpcontroller.js";
 import mapaatualizacoesController from "./syncDown/mapaatualizacoesController.js";
-import pedidoController from "./syncUp/pedidoController.js";
+// import pedidoController from "./syncUp/pedidoController.js";
 import pedidoControllers from "./syncUp/pedidoControllerteste.js";
 
 const router = Router();
@@ -50,7 +50,7 @@ router.get(
 /*CONEXÕES TABELA*/
 
 /*BAIRRO*/
-router.post("/sync/insert/:tabela", pedidoController.postPedido);
+router.post("/sync/insert/:tabela", pedidoControllers.postPedido);
 // router.put("/sync/update/:tabela", pedidoController.UpdatePedido);
 router.put("/sync/update/:tabela", pedidoControllers.UpdatePedidos);
 /*BAIRRO*/
