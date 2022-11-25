@@ -18,15 +18,15 @@ router.get(
 
 /*GRUPO PRODUTO*/
 router.get(
-  "/sync/insert/grupoproduto/:cntinsert/:codemp",
+  "/sync/insert/gruposprod/:cntinsert/:codemp",
   gpcontroller.getTableInsert
 );
 router.get(
-  "/sync/update/grupoproduto/:cntupdate/:codemp",
+  "/sync/update/gruposprod/:cntupdate/:codemp",
   gpcontroller.getTableUpdate
 );
 /************************************************************** */
-router.post("/grupoproduto", gpcontroller.postTable);
+router.post("/gruposprod", gpcontroller.postTable);
 /*GRUPO PRODUTO*/
 
 /*CONEXÕES TABELA*/

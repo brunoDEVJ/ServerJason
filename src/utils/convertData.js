@@ -13,8 +13,10 @@ function converterData (data){
     +hours - 3,
     +minutes,
     +seconds
-  );
+    );
+    console.log(date)
   return date;
-}
 
+}
+converterData("23/03/2013 15:40:37")
 export default converterData

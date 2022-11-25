@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-
+import converterData from "../utils/convertData.js";
 const prisma = new PrismaClient();
 
 export default {
@@ -42,12 +42,17 @@ export default {
   /*********************************************************/
   async postTable(req, res) {
     try {
-      let { DESCRICAO, CODEMP } = req.body;
+      let { CODGRUPO,
+        DATAALTERACAO ,
+        DSCGRUPO,
+        LOGINUSUARIO,} = req.body;
 
-      let cGrupoProduto = await prisma.grupoproduto.create({
+      let cGrupoProduto = await prisma.gruposprod.create({
         data: {
-          DESCRICAO,
-          CODEMP,
+          CODGRUPO,
+          DATAALTERACAO: converterData(DATAALTERACAO) ,
+          DSCGRUPO,
+          LOGINUSUARIO, 
         },
       });
 

@@ -12,35 +12,39 @@ datasource db {
 }
 
 model abastfrota {
-  codabast       Int       @id
-  placaveiculo   String?   @db.VarChar(10)
-  codbico        Int?
-  kminicial      Float?
-  kmfinal        Float?
-  volume         Float?
-  valor          Float?
-  codmotorista   Int?
-  codabastecedor Int?
-  kmlitro        Float?
-  data           DateTime? @db.Date
-  hora           DateTime? @db.Date
-  combustivel    String?   @db.VarChar(20)
-  chaveexp       Int?
-  dscdep         String?   @db.VarChar(30)
-  flglog         String?   @db.VarChar(1)
-  codemp         Int?
-  dataalteracao  DateTime? @db.Date
+  CODABAST       Int       @id
+  PLACAVEICULO   String?   @db.VarChar(10)
+  CODBICO        Int?
+  KMINICIAL      Float?    @db.Float
+  KMFINAL        Float?    @db.Float
+  VOLUME         Float?    @db.Float
+  VALOR          Float?    @db.Float
+  CODMOTORISTA   Int?
+  CODABASTECEDOR Int?
+  KMLITRO        Float?    @db.Float
+  DATA           DateTime? @db.Date
+  HORA           DateTime? @db.Date
+  COMBUSTIVEL    String?   @db.VarChar(20)
+  CHAVEEXP       Int?
+  DSCDEP         String?   @db.VarChar(30)
+  FLGLOG         String?   @db.VarChar(1)
+  CODEMP         Int?
+  DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model abastmem {
   CODBICO       Int
   NUMABAST      Int
-  VALORABAST    Float
-  VOLABAST      Float
+  VALORABAST    Float     @db.Float
+  VOLABAST      Float     @db.Float
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -54,12 +58,14 @@ model abastturno {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   turnos        turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_1")
   bicos         bicos     @relation(fields: [CODBICO], references: [CODBICO], onDelete: NoAction, onUpdate: NoAction, map: "FK_2")
 
   @@id([HORAABAST, CODBICO])
-  @@index([CODTURNO], map: "FK_1")
-  @@index([CODBICO], map: "FK_2")
+  @@index([CODTURNO], map: "RDB$FOREIGN29")
+  @@index([CODBICO], map: "RDB$FOREIGN30")
 }
 
 model acessos {
@@ -70,10 +76,13 @@ model acessos {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([LOGINUSUARIO, CODMENU])
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model acrescgrupocliente {
   CODCLIENTE    Int
   CODGRUPO      String   @db.VarChar(14)
@@ -84,10 +93,13 @@ model acrescgrupocliente {
   VALORACRESC   Float?
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
-  @@id([CODCLIENTE, CODGRUPO, TIPOPAG])
+  @@ignore
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model acrescprodcliente {
   CODCLIENTE    Int
   CODPROD       String   @db.VarChar(14)
@@ -98,8 +110,10 @@ model acrescprodcliente {
   VALORACRESC   Float?
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
-  @@id([CODCLIENTE, CODPROD, TIPOPAG])
+  @@ignore
 }
 
 model admcartao {
@@ -117,6 +131,8 @@ model admcartao {
   FLGLOG                                           String?  @db.VarChar(1)
   CODEMP                                           Int?
   CODDETALCONTA                                    Int?
+  CNTINSERT                                        Int?
+  CNTUPDATE                                        Int?
   contas_admcartao_CONTACREDITADAADMCARTAOTocontas contas?  @relation("admcartao_CONTACREDITADAADMCARTAOTocontas", fields: [CONTACREDITADAADMCARTAO], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_3")
   tipodes                                          tipodes? @relation(fields: [CODTIPODES], references: [CODTIPODES], onDelete: NoAction, onUpdate: NoAction, map: "FK_4")
   contas_admcartao_CODCARTAOTocontas               contas   @relation("admcartao_CODCARTAOTocontas", fields: [CODCARTAO], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_82")
@@ -135,6 +151,8 @@ model afericoes {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   turnos        turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_5")
   bicos         bicos     @relation(fields: [CODBICO], references: [CODBICO], onDelete: NoAction, onUpdate: NoAction, map: "FK_6")
 
@@ -155,6 +173,8 @@ model agend {
   FLGLOG              String?     @db.VarChar(1)
   CODEMP              Int?
   DATAALTERACAO       DateTime?   @db.Date
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
   gruposagend         gruposagend @relation(fields: [CODGRUOPAGEND], references: [CODGRUPOAGEND], onDelete: NoAction, onUpdate: NoAction, map: "FK_8")
 
   @@index([CODGRUOPAGEND], map: "FK_8")
@@ -167,6 +187,8 @@ model ajusteencerrantegv {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model ajusteicms {
@@ -193,14 +215,14 @@ model ajusteicms {
   FLGLOG                      String?                 @db.VarChar(1)
   DATAALTERACAO               DateTime?               @db.Date
   CODEMP                      Int?
-  dados_ajuste_icms           dados_ajuste_icms       @relation(fields: [COD_DADOS_AJUSTE_ICMS], references: [COD_AJUSTE_ICMS], onDelete: Cascade, map: "FK_AJUSTEICMS_1")
+  CNTINSERT                   Int?
+  CNTUPDATE                   Int?
   origem_tribut               origem_tribut           @relation(fields: [COD_ORIGEM_TRIBUT], references: [COD_ORIGEM_TRIBUT], onDelete: Cascade, map: "FK_AJUSTEICMS_2")
   influencia_recolhimento     influencia_recolhimento @relation(fields: [COD_INFLUENCIA_RECOLHIMENTO], references: [COD_INFLUENCIA_RECOLHIMENTO], onDelete: Cascade, map: "FK_AJUSTEICMS_3")
   responsabilidade_icms       responsabilidade_icms   @relation(fields: [COD_RESPONSABILIDADE], references: [COD_RESPONSABILIDADE], onDelete: Cascade, map: "FK_AJUSTEICMS_4")
   tipo_apuracao               tipo_apuracao           @relation(fields: [COD_TIPO_APURACAO], references: [COD_TIPO_APURACAO], onDelete: Cascade, map: "FK_AJUSTEICMS_5")
   reflexo_apuracao_icms       reflexo_apuracao_icms   @relation(fields: [COD_REFLEXO_APURACAO_ICMS], references: [COD_REFLEXO_APURACAO_ICMS], onDelete: Cascade, map: "FK_AJUSTEICMS_6")
 
-  @@index([COD_DADOS_AJUSTE_ICMS], map: "FK_AJUSTEICMS_1")
   @@index([COD_ORIGEM_TRIBUT], map: "FK_AJUSTEICMS_2")
   @@index([COD_INFLUENCIA_RECOLHIMENTO], map: "FK_AJUSTEICMS_3")
   @@index([COD_RESPONSABILIDADE], map: "FK_AJUSTEICMS_4")
@@ -227,6 +249,8 @@ model aliquotas {
   CSTICMS        String?    @db.VarChar(3)
   CODGRUPODESP   Int?
   INDFCP         Decimal?   @db.Decimal(15, 2)
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
   produtos       produtos[]
 }
 
@@ -238,6 +262,8 @@ model aliquotasfcp {
   DATAALTERACAO DateTime? @db.Date
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   ufs           ufs       @relation(fields: [SIGLAUF], references: [SIGLAUF], onDelete: NoAction, onUpdate: NoAction, map: "FK_ALIQUOTASFCP")
 
   @@id([SIGLAUF, CODPROD])
@@ -245,37 +271,38 @@ model aliquotasfcp {
 
 model aliquotasinterestadual {
   UF            String    @id @db.VarChar(2)
-  AC            Float
-  AL            Float
-  AM            Float
-  AP            Float
-  BA            Float
-  CE            Float
-  DF            Float
-  ES            Float
-  GO            Float
-  MA            Float
-  MT            Float
-  MS            Float
-  MG            Float
-  PA            Float
-  PB            Float
-  PR            Float
-  PE            Float
-  PI            Float
-  RN            Float
-  RS            Float
-  RJ            Float
-  RO            Float
-  RR            Float
-  SC            Float
-  SP            Float
-  SE            Float
-  TC            Float
+  AC            Float     @db.Float
+  AL            Float     @db.Float
+  AM            Float     @db.Float
+  AP            Float     @db.Float
+  BA            Float     @db.Float
+  CE            Float     @db.Float
+  DF            Float     @db.Float
+  ES            Float     @db.Float
+  GO            Float     @db.Float
+  MA            Float     @db.Float
+  MT            Float     @db.Float
+  MS            Float     @db.Float
+  MG            Float     @db.Float
+  PA            Float     @db.Float
+  PB            Float     @db.Float
+  PR            Float     @db.Float
+  PE            Float     @db.Float
+  PI            Float     @db.Float
+  RN            Float     @db.Float
+  RS            Float     @db.Float
+  RJ            Float     @db.Float
+  RO            Float     @db.Float
+  RR            Float     @db.Float
+  SC            Float     @db.Float
+  SP            Float     @db.Float
+  SE            Float     @db.Float
+  TC            Float     @db.Float
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
   LOGINUSUARIO  String?   @db.VarChar(20)
-  FLGLOG        String?   @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -283,13 +310,15 @@ model balancete {
   DATAMOV       DateTime? @db.Date
   DATADOC       DateTime? @db.Date
   HISTORICO     String?   @db.Char(50)
-  VALORDEBT     Float?
-  VALORCRED     Float?
-  SALDO         Float?
+  VALORDEBT     Float?    @db.Float
+  VALORCRED     Float?    @db.Float
+  SALDO         Float?    @db.Float
   ALTERACAO     DateTime? @db.Date
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -307,6 +336,8 @@ model balancetetemp {
   CODEMP        Int
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODREDUZIDO, CODEMP])
 }
@@ -327,6 +358,8 @@ model bancos {
   CIADE_AGENCIA        String?               @db.VarChar(20)
   UF_AGENCIA           String?               @db.VarChar(2)
   CONTABIL_SEQUENCIAL  String?               @db.VarChar(60)
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   plano_conta_contabil plano_conta_contabil? @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_BANCOS_CONTABIL")
   contascorrentes      contascorrentes[]
 
@@ -337,11 +370,13 @@ model base_icms {
   CODPROD       String    @db.VarChar(14)
   CODCOMPRAPROD Int
   DATA          DateTime  @db.Date
-  QUANTIDADE    Float
+  QUANTIDADE    Float     @db.Float
   VALORICMS     Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODPROD, CODCOMPRAPROD])
 }
@@ -383,16 +418,16 @@ model bicos {
   BICOREMOTO           String?           @db.VarChar(1)
   SEQABASTEEP          Int?
   CONSTANTEENC         Float?
-  PRECO15              Float?
-  PRECO30              Float?
-  PRECO45              Float?
-  PRECO60              Float?
-  PRECO90              Float?
-  PRECOESPECIAL        Float?
+  PRECO15              Float?            @db.Float
+  PRECO30              Float?            @db.Float
+  PRECO45              Float?            @db.Float
+  PRECO60              Float?            @db.Float
+  PRECO90              Float?            @db.Float
+  PRECOESPECIAL        Float?            @db.Float
   DESCONECTADO         String?           @db.Char(1)
   PORTA                Int?
   IP                   String?           @db.VarChar(15)
-  ARREDVALOR           Float?
+  ARREDVALOR           Float?            @db.Float
   CALCENC              String?           @db.Char(1)
   ACRESCCOMBUSBICO     Float?
   LIBERARACRESCBICO    String?           @db.VarChar(1)
@@ -402,15 +437,16 @@ model bicos {
   LOG                  String?           @db.VarChar(2)
   DTHRPERDACOMUNIC     DateTime?         @db.Date
   ENCRETORNOCOMUNIC    Float?
-  DESATIVADO           String?           @db.VarChar(1)
   ENCPERDACOMUNIC      Float?
+  DESATIVADO           String?           @db.VarChar(1)
   STATUSTROCAPRECO     String?           @db.Char(1)
   CODTERMINALOLD       Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   tanques              tanques           @relation(fields: [CODTANQUE], references: [CODTANQUE], onDelete: NoAction, onUpdate: NoAction, map: "FK_7")
   abastturno           abastturno[]
   afericoes            afericoes[]
   lmcdetail            lmcdetail[]
-  totaisbicocaixa      totaisbicocaixa[]
   totaisbicoturno      totaisbicoturno[]
   ultimosabast         ultimosabast[]
 
@@ -458,6 +494,8 @@ model boleta {
   CODBOLETA         Int       @id
   INSTRUCOES        String?   @db.VarChar(200)
   DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model boletoeletronicoacbrfast {
@@ -496,14 +534,16 @@ model boletoeletronicoacbrfast {
   RESPEMISSAO            String?   @db.VarChar(1)
   CODBANCO               Int
   CAMINHOANEXOEMAIL      String?   @db.VarChar(255)
+  CODEMP                 Int
   FLGLOG                 String?   @db.VarChar(1)
   DATAALTERACAO          DateTime? @db.Date
-  CODEMP                 Int?
-  VALORRECEBIDO          Decimal?  @db.Decimal(15, 2)
   DATARECEBIMENTO        DateTime? @db.Date
+  VALORRECEBIDO          Decimal?  @db.Decimal(15, 2)
   NOMEARQBOLETO          String?   @db.VarChar(500)
   NOMEARQNFSE            String?   @db.VarChar(500)
   TIPOREMESSA            Int?
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
 }
 
 model bombas {
@@ -518,6 +558,8 @@ model bombas {
   DATALACRACAO  DateTime? @db.Date
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model bombaslacre {
@@ -528,6 +570,8 @@ model bombaslacre {
   CODEMP        Int?
   NUMEROLACRE   String    @db.VarChar(20)
   DATALACRACAO  DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODBOMBA, NUMEROLACRE])
 }
@@ -538,25 +582,27 @@ model cad_ciap {
   DATA_INICIAL_CIAP       DateTime?             @db.Date
   PARCELAS_CREDITADAS     Int?
   VALOR_ICMS_INCIAL       Float?
-  VALOR_PARCELAS          Int?
+  VALOR_PARCELAS          Float?                @db.Float
   TIPO_MOV_ID             Int
   COD_TIPO_MOV_INICIAL    Int
   NF_EMISSAO_PROPRIA      Int                   @default(1)
   STATUS                  String                @default("ABERTO") @db.VarChar(8)
-  DATA_ULTIMA_ATUALIZACAO DateTime?             @db.Date
-  CODPROD                 String                @default("0") @db.VarChar(14)
-  VALOR_CREDT_APROVEITADO Float?                @default(0)
-  DATA_APURACAO           DateTime?             @db.Date
   COD_NAT_CC              String?               @db.VarChar(2)
   IND_CTA                 String?               @db.VarChar(1)
   NIVEL_CONTA             String?               @db.VarChar(5)
   COD_CTA                 String?               @db.VarChar(60)
   NOME_CTA                String?               @db.VarChar(60)
   DT_ALT                  DateTime?             @db.Date
+  DATA_ULTIMA_ATUALIZACAO DateTime?             @db.Date
+  DATA_APURACAO           DateTime?             @db.Date
+  CODPROD                 String                @default("0") @db.VarChar(14)
+  VALOR_CREDT_APROVEITADO Float?                @default(0)
   CONTABIL_SEQUENCIAL     String?               @db.VarChar(60)
   FLGLOG                  String?               @db.VarChar(1)
   DATAALTERACAO           DateTime?             @db.Date
   CODEMP                  Int?
+  CNTINSERT               Int?
+  CNTUPDATE               Int?
   comprasprodmatconsumo   comprasprodmatconsumo @relation(fields: [CODCOMPRAPRODMATCONSUMO], references: [CODCOMPRAMATCONSUMO], onDelete: NoAction, onUpdate: NoAction, map: "FK_CAD_CIAP_1")
   plano_conta_contabil    plano_conta_contabil? @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_CAD_CIAP_2")
 
@@ -579,6 +625,8 @@ model cadfiliais {
   CADFILIAIS_PASSWORD    String?   @db.VarChar(50)
   CADFILIAIS_DATABASE    String?   @db.VarChar(300)
   CADFILIAIS_USERNAME    String?   @db.VarChar(60)
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
 
   @@id([CADFILIAISID, CODEMP])
 }
@@ -595,6 +643,8 @@ model caixageral {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model caixas {
@@ -614,13 +664,11 @@ model caixas {
   CODEMP             Int?
   REPASSADOCAIXA     Float?
   NUMCAIXA           Int?
-  funcionarios       funcionarios        @relation(fields: [CODFUNC], references: [CODFUNC], onDelete: NoAction, onUpdate: NoAction, map: "FK_CAIXAS_1")
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   esttqfisico        esttqfisico[]
   prodcaixaterminal  prodcaixaterminal[]
-  totaisbicocaixa    totaisbicocaixa[]
   vendas             vendas[]
-
-  @@index([CODFUNC], map: "FK_CAIXAS_1")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -633,6 +681,8 @@ model caixasfunc {
   LOGINUSUARIO  String?   @db.VarChar(20)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -643,6 +693,8 @@ model cargos {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model cartaoclubpremia {
@@ -655,6 +707,8 @@ model cartaoclubpremia {
   CODEMP        Int?
   CODCLIENTE    Int?
   NOMEMOTORISTA String?  @db.VarChar(30)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model cartaomudapreco {
@@ -664,6 +718,8 @@ model cartaomudapreco {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model cartoescredito {
@@ -687,6 +743,11 @@ model cartoescredito {
   TIPO                 String?   @db.VarChar(1)
   PERCTAXAADM          Float?
   CODTIPOREC           Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
+  contas               contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_9")
+
+  @@index([CODCONTA], map: "FK_9")
 }
 
 model catclientes {
@@ -698,6 +759,8 @@ model catclientes {
   CODEMP        Int?
   FLGVDG        String?    @db.VarChar(1)
   CATBLOQUEADO  String?    @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   clientes      clientes[]
 }
 
@@ -708,6 +771,8 @@ model catclientespreco {
   DATAALTERACAO      DateTime @db.Date
   FLGLOG             String?  @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 }
 
 model cce {
@@ -721,6 +786,8 @@ model cce {
   NUMNOTA       Int?
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model ccfunc {
@@ -738,6 +805,8 @@ model ccfunc {
   CODCAIXA      Int?
   CODTIPOREC    Int?
   CODTIPOPAG    Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   funcionarios  funcionarios @relation(fields: [CODFUNC], references: [CODFUNC], onDelete: NoAction, onUpdate: NoAction, map: "FK_10")
 
   @@index([CODFUNC], map: "FK_10")
@@ -753,12 +822,14 @@ model centrocusto {
   NIVEL                 String?   @db.VarChar(1)
   SEQUENCIAL            String?   @db.VarChar(60)
   DATA_CADASTRO_CONTA   DateTime? @db.Date
-  CENTRODECUSTO_ID      Int
-  ATIVO                 String?   @db.VarChar(1)
   TIPO_CONTA            String?   @db.VarChar(1)
   NATUREZA              String?   @db.VarChar(1)
+  CENTRODECUSTO_ID      Int
+  ATIVO                 String?   @db.VarChar(1)
   SALDO_ATUAL           Decimal?  @db.Decimal(15, 2)
   DATAALTERACAO         DateTime? @db.Date
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
 }
 
 model cest {
@@ -771,6 +842,8 @@ model cest {
   CODEMP        Int?
   ANEXO_XXVII   String?   @db.VarChar(150)
   CODANEXOXXVII Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model cfop {
@@ -783,10 +856,10 @@ model cfop {
   BAIXA_ESTOQUE         String?                 @db.VarChar(1)
   CFOP_DEVOLUCAO        String?                 @db.VarChar(1)
   DATAALTERACAO         DateTime?               @db.Date
-  comprasprod           comprasprod[]
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
   comprasprodmatconsumo comprasprodmatconsumo[]
   itenscompra           itenscompra[]
-  itenscompramatconsumo itenscompramatconsumo[]
 }
 
 model chaveacessovalidador {
@@ -797,6 +870,8 @@ model chaveacessovalidador {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model chaverequisicao {
@@ -807,6 +882,8 @@ model chaverequisicao {
   DATAALTERACAO   DateTime @db.Date
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -825,6 +902,8 @@ model chemit {
   DATAALTERACAO       DateTime? @db.Date
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@ignore
 }
@@ -845,6 +924,8 @@ model cheques {
   DATAALTERACAO     DateTime? @db.Date
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model chequesdepositados {
@@ -853,6 +934,8 @@ model chequesdepositados {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   chrec         chrec     @relation(fields: [NUMCHEQUEART], references: [NUMCHEQUEART], onDelete: NoAction, onUpdate: NoAction, map: "FK_11")
 
   @@id([NUMCHEQUEART, NUMCONC])
@@ -889,6 +972,8 @@ model chrec {
   DATAALTERACAO      DateTime?            @db.Date
   CODTIPOPAG         Int?
   LOGINUSUARIO       String?              @db.VarChar(20)
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   chequesdepositados chequesdepositados[]
 }
 
@@ -907,6 +992,8 @@ model chtroco {
   SELECIONADOCHEQUE String?   @db.VarChar(1)
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   contas            contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_12")
 
   @@index([CODCONTA], map: "FK_12")
@@ -915,13 +1002,15 @@ model chtroco {
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model chtrocomanual {
   NUMCHEQUE     String?   @db.Char(10)
-  VALORTROCO    Float?
+  VALORTROCO    Float?    @db.Float
   DESCCONTA     String?   @db.Char(20)
   CODTROCO      Int?
   CODCONTA      Int?
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -935,7 +1024,8 @@ model cidades {
   FLGLOG        String?        @db.VarChar(1)
   CODEMP        Int?
   CODUF         String?        @db.VarChar(2)
-  clientes      clientes[]
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   empticket     empticket[]
   empvf         empvf[]
   fornecedores  fornecedores[]
@@ -943,7 +1033,7 @@ model cidades {
 }
 
 model clientes {
-  CODCLIENTE                  Int                   @id @unique(map: "CLIENTES0")
+  CODCLIENTE                  Int                   @id
   CODCIDADE                   Int?
   NOMECLIENTE                 String                @db.VarChar(60)
   ENDCLIENTE                  String?               @db.VarChar(40)
@@ -984,9 +1074,9 @@ model clientes {
   CARTACREDITOLIMITE          Float?
   CARTACREDITOUTILIZADO       Float?
   CODCLASSEA                  Int?
-  PONTOS                      Float?
-  REAISPONTO                  Float?
-  ACUMPONTOS                  Float?
+  PONTOS                      Float?                @db.Float
+  REAISPONTO                  Float?                @db.Float
+  ACUMPONTOS                  Float?                @db.Float
   CODFAT                      String?               @db.Char(2)
   CONSUMOPROPRIO              String?               @db.Char(1)
   NUMERO                      String?               @db.VarChar(10)
@@ -995,7 +1085,7 @@ model clientes {
   TEMCONTRATO                 String?               @db.Char(1)
   DSCHW                       String?               @db.Char(60)
   DSCSW                       String?               @db.Char(60)
-  VALORCONTRATO               Float?
+  VALORCONTRATO               Float?                @db.Float
   DSCSITUACAO                 String?               @db.Char(40)
   BLOQAUTO                    String?               @db.Char(1)
   BLOQAUTOFAT                 String?               @db.Char(1)
@@ -1017,8 +1107,8 @@ model clientes {
   ANO_ENVIO_EMAIL_ANIVERSARIO Int                   @default(2013)
   FLGJUROSNOTA                String?               @db.VarChar(1)
   FLGJUROSFATURA              String?               @db.VarChar(1)
-  CONTABIL_SEQUENCIAL         String?               @db.VarChar(60)
   CODCATCLIENTEPRECO          Int?
+  CONTABIL_SEQUENCIAL         String?               @db.VarChar(60)
   MSGVINCULADO                String?               @db.VarChar(200)
   DATAEXPEDICAO               DateTime?             @db.Date
   ORGAOEXPEDIDOR              String?               @db.VarChar(10)
@@ -1031,22 +1121,18 @@ model clientes {
   WHATSAPPCLIENTE             String?               @db.VarChar(20)
   FLGENVIAWHATSNOTA           String?               @db.VarChar(1)
   BLOQAUTOLIM                 String?               @db.VarChar(1)
+  MODULO                      Int?
+  CNTINSERT                   Int?
+  CNTUPDATE                   Int?
   emptaxi                     emptaxi?              @relation(fields: [CODEMPTAXI], references: [CODEMPTAXI], onDelete: NoAction, onUpdate: NoAction, map: "FK_13")
   catclientes                 catclientes?          @relation(fields: [CODCATCLIENTE], references: [CODCATCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_14")
-  cidades                     cidades?              @relation(fields: [CODCIDADE], references: [CODCIDADE], onDelete: NoAction, onUpdate: NoAction, map: "FK_15")
   ufs                         ufs?                  @relation(fields: [SIGLAUF], references: [SIGLAUF], onDelete: NoAction, onUpdate: NoAction, map: "FK_16")
   plano_conta_contabil        plano_conta_contabil? @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_CLIENTES_CONTABIL")
   clientesftptemp             clientesftptemp[]
-  cr                          cr[]
-  descprodcliente             descprodcliente[]
   descvendacliente            descvendacliente[]
-  faturas                     faturas[]
-  refcliente                  refcliente[]
-  veiculos                    veiculos[]
 
   @@index([CODEMPTAXI], map: "FK_13")
   @@index([CODCATCLIENTE], map: "FK_14")
-  @@index([CODCIDADE], map: "FK_15")
   @@index([SIGLAUF], map: "FK_16")
   @@index([CONTABIL_SEQUENCIAL], map: "FK_CLIENTES_CONTABIL")
 }
@@ -1059,6 +1145,8 @@ model clientesftptemp {
   DATAALTERACAO       DateTime? @db.Date
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
   clientes            clientes  @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_CLIENTESFTPTEMP_1")
 
   @@id([CODCLIENTE, CODEMP])
@@ -1079,6 +1167,8 @@ model clientesvenda {
   CIDADE        String?   @db.VarChar(30)
   SIGLAUF       String?   @db.VarChar(2)
   CEP           String?   @db.VarChar(12)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model combustiveis {
@@ -1094,6 +1184,8 @@ model combustiveis {
   DATAALTERACAO     DateTime? @db.Date
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model compras {
@@ -1119,6 +1211,8 @@ model compras {
   TIPOCOMPRA    String?   @db.VarChar(1)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model comprasnfeconsulta {
@@ -1137,6 +1231,8 @@ model comprasnfeconsulta {
   LOGINUSUARIO          String?   @db.VarChar(20)
   DATAALTERACAO         DateTime? @db.Date
   SCHEMA                Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
 
   @@id([COMPRASNFECONSULTA_ID, CODEMP])
 }
@@ -1148,6 +1244,8 @@ model comprasnfemanifesto {
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model comprasprod {
@@ -1196,13 +1294,13 @@ model comprasprod {
   CODCOMPRA_CP             Int?
   NFAVULSO                 String?       @db.VarChar(1)
   FLGCALCICMSST            String?       @db.VarChar(1)
+  CNTINSERT                Int?
+  CNTUPDATE                Int?
   fornecedores             fornecedores  @relation(fields: [CODFORNEC], references: [CODFORNEC], onDelete: NoAction, onUpdate: NoAction, map: "FK_17")
-  cfop                     cfop?         @relation(fields: [CODCFOP], references: [CODCFOP], onDelete: Cascade, map: "FK_COMPRASPROD_1")
   itenscompra              itenscompra[]
 
   @@index([DATACOMPRAPROD], map: "COMPRASPROD_IDXSPD1")
   @@index([CODFORNEC], map: "FK_17")
-  @@index([CODCFOP], map: "FK_COMPRASPROD_1")
 }
 
 model comprasprodmatconsumo {
@@ -1248,6 +1346,8 @@ model comprasprodmatconsumo {
   PERCICMSCREDITO                 Float?
   CODCOMPRA_CP                    Int?
   NFAVULSO                        String?    @db.VarChar(1)
+  CNTINSERT                       Int?
+  CNTUPDATE                       Int?
   cfop                            cfop?      @relation(fields: [CODCFOP], references: [CODCFOP], onDelete: NoAction, map: "FK_COMPRASPRODMATCONSUMO_1")
   cad_ciap                        cad_ciap[]
 
@@ -1266,9 +1366,39 @@ model conciliacao {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   contas        contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_18")
 
   @@index([CODCONTA], map: "FK_18")
+}
+
+model conexoes {
+  CONEXAO_ID            Int       @id @default(0)
+  DESCRICAO             String?   @db.VarChar(25)
+  PATHREDE              String    @db.VarChar(100)
+  ATIVO                 String?   @db.VarChar(1)
+  DATAULTIMAATUALIZACAO DateTime? @db.Date
+  LOGINUSUARIO          String    @db.VarChar(20)
+  PORTA                 Int?
+  REGISTROSENVIO        Int?
+  CODEMP                Int?
+  PORTABROAD            Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
+}
+
+model conexoestabela {
+  CONEXOESTABELA_ID Int     @id
+  NOMETABELA        String? @db.VarChar(100)
+  CODEMP            Int?
+  UP                String? @db.VarChar(1)
+  DOWN              String? @db.VarChar(1)
+  TERMINALINSERT    Int?
+  BANCOINSERT       Int?
+  BANCOUPDATE       Int?
+  TERMINALUPDATE    Int?
+  ORDER_UP          Int?
 }
 
 model config {
@@ -1393,7 +1523,7 @@ model config {
   NCTA                   String?   @db.Char(2)
   LCRP                   String?   @db.Char(2)
   CTCP                   String?   @db.Char(2)
-  UDEP                   Float?
+  UDEP                   Float?    @db.Float
   ECSC                   String?   @db.Char(2)
   OVDT                   String?   @db.Char(2)
   EPVP                   String?   @db.Char(2)
@@ -1403,7 +1533,7 @@ model config {
   VFFC                   String?   @db.Char(2)
   UTLT                   String?   @db.Char(2)
   EVAP                   String?   @db.Char(2)
-  VALORLIMITEEVAP        Float?
+  VALORLIMITEEVAP        Float?    @db.Float
   IIEC                   String?   @db.Char(2)
   INMC                   String?   @db.Char(2)
   NUMULTIMOTURNO         Int?
@@ -1481,13 +1611,13 @@ model config {
   AMAV                   String?   @db.Char(1)
   NUMNFPISTA             Int?
   PSTD                   String?   @db.Char(1)
+  DCDN                   String?   @db.Char(1)
+  TECM                   String?   @db.Char(1)
+  AENC                   String?   @db.Char(1)
   URCM                   String?   @db.Char(1)
   USAOBSNF               String?   @db.Char(1)
   QTDLINHA               Int?
   UICMS                  String?   @db.Char(1)
-  AENC                   String?   @db.Char(1)
-  DCDN                   String?   @db.Char(1)
-  TECM                   String?   @db.Char(1)
   UICL                   String?   @db.Char(1)
   QCDL                   Int?
   UICC                   String?   @db.Char(1)
@@ -1498,7 +1628,7 @@ model config {
   ATUALIZAPISTA          String?   @db.VarChar(1)
   USAACRESCIMOBICO       String?   @db.Char(1)
   DMAB                   String?   @db.Char(2)
-  UAEP                   Float?
+  UAEP                   Float?    @db.Float
   AMAP                   String?   @db.Char(1)
   FLGLOG                 String?   @db.VarChar(1)
   CODEMP                 Int?
@@ -1507,13 +1637,13 @@ model config {
   FECHAMENTO_FUNCIONARIO Int?
   USAPLACANF             String?   @default("N") @db.Char(1)
   HAB_OUTROS_DESC        String?   @db.VarChar(1)
-  FLGPRECOLMC            String?   @db.VarChar(1)
-  DATAALTERACAO          DateTime? @db.Date
   VERSAO_GERENCIAL       String?   @db.VarChar(10)
   ESTTERMINAL            String?   @db.VarChar(2)
   RAZAOSOCIAL_PAFECF     String?   @db.VarChar(50)
   CNPJ_PAFECF            String?   @db.VarChar(14)
   VERSAO_PAFECF          String?   @db.VarChar(10)
+  FLGPRECOLMC            String?   @db.VarChar(1)
+  DATAALTERACAO          DateTime? @db.Date
   USANFCE                String?   @db.Char(1)
   SOCLIENTEATIVO         String?   @db.VarChar(1)
   SOFORNECATIVO          String?   @db.VarChar(1)
@@ -1526,9 +1656,9 @@ model config {
   SERIENFE               String?   @db.VarChar(2)
   FCALCCAIXA             String?   @db.VarChar(10)
   CSTNFECADASTRO         String?   @db.VarChar(1)
+  VCD                    String?   @db.VarChar(1)
   TPCUSTOINV             String?   @db.Char(1)
   MCUSTOINV              Int?
-  VCD                    String?   @db.VarChar(1)
   NDE                    String?   @db.VarChar(1)
   CLUBPREMIA             String?   @db.VarChar(1)
   MAXVALORPERMITIDO      Decimal?  @db.Decimal(15, 2)
@@ -1537,6 +1667,10 @@ model config {
   DAVP                   String?   @db.VarChar(1)
   QTDCASADECIMALPRECO    Int?
   CAIXATROCO             String?   @db.VarChar(1)
+  SERIECTE               String?   @db.VarChar(2)
+  NUMCTE                 Int?
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
 }
 
 model config_plano_centro_custo {
@@ -1547,6 +1681,8 @@ model config_plano_centro_custo {
   CODEMP              Int?
   FLGLOG              String?   @db.VarChar(1)
   DATAALTERACAO       DateTime? @db.Date
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model config_plano_contas {
@@ -1572,6 +1708,8 @@ model config_plano_contas {
   TIPOCONTASPEDC      String?   @db.VarChar(1)
   ANALITICOAGRUPADO   String?   @db.VarChar(1)
   TIPOCONTASPEDD      String?   @db.VarChar(1)
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model configabast {
@@ -1579,10 +1717,12 @@ model configabast {
   CODPOSTO           Int?
   TMANUTENCAO        String?   @db.VarChar(50)
   TCRIARABAST        String?   @db.VarChar(50)
+  CODEMP             Int?
   FLGLOG             String?   @db.VarChar(1)
   DATAALTERACAO      DateTime? @db.Date
-  CODEMP             Int?
   TLIMITEVALORNFCEUF String?   @db.VarChar(50)
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 }
 
 model configboleta {
@@ -1600,6 +1740,8 @@ model configboleta {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODTIPOBOLETA, NUMCAMPO])
 }
@@ -1613,12 +1755,14 @@ model configboletoeletronicoacbr {
   VALORPERCENTMULTA  Decimal?  @db.Decimal(15, 2)
   MENSAGEMINSTRUCOES String?   @db.VarChar(255)
   TIPOCOBRANCA       String?   @db.VarChar(20)
+  CODEMP             Int?
   FLGLOG             String?   @db.VarChar(1)
   DATAALTERACAO      DateTime? @db.Date
-  CODEMP             Int?
   LAYOUTARQREMESSA   String    @default("C400") @db.VarChar(10)
   TIPOMORA           Int?
   TIPOMULTA          Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1636,6 +1780,8 @@ model configchtroco {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -1656,6 +1802,8 @@ model confignf {
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 
   @@ignore
 }
@@ -1721,13 +1869,13 @@ model configtemp {
   NUMTERMINALFECH        Int?
   DATAULTENCDIA          DateTime? @db.Date
   DATA_CHK_ITENSCODIGO   DateTime? @db.Date
+  LOG                    String?   @db.VarChar(2)
+  PERDADADOSABAST        String?   @db.VarChar(1)
+  TIPOIMP                Int?
   ATUALIZARSERVIDOR      String?   @db.VarChar(1)
   FILIAL_CAD             Int?
   MULTI_BANCO            Int?
   DATAALTERACAO          DateTime? @db.Date
-  LOG                    String?   @db.VarChar(2)
-  PERDADADOSABAST        String?   @db.VarChar(1)
-  TIPOIMP                Int?
   TESTECOM               Int?
   SATSESSAO              Int?
   ULT_NSU_CON_SEFAZ      Int?
@@ -1738,12 +1886,16 @@ model configtemp {
   DATACARGASERVER        DateTime? @db.Date
   CONFIGBOTWHATS         String?   @db.VarChar(1)
   DATAHORACONSUMODFE     DateTime? @db.Date
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
 }
 
 model contapaginstantaneo {
   CODPAG           Int  @id
   CODCONTA         Int?
   CODCONTACORRENTE Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 model contas {
@@ -1764,22 +1916,25 @@ model contas {
   DESATIVADO                                          String?               @db.VarChar(1)
   USARCLUBPREMIA                                      String?               @db.VarChar(1)
   FINANCEIRA                                          String?               @db.VarChar(20)
+  CNTINSERT                                           Int?
+  CNTUPDATE                                           Int?
   plano_conta_contabil                                plano_conta_contabil? @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_CONTAS_CONTABIL")
   admcartao_admcartao_CONTACREDITADAADMCARTAOTocontas admcartao[]           @relation("admcartao_CONTACREDITADAADMCARTAOTocontas")
   admcartao_admcartao_CODCARTAOTocontas               admcartao?            @relation("admcartao_CODCARTAOTocontas")
+  cartoescredito                                      cartoescredito[]
   chtroco                                             chtroco[]
   conciliacao                                         conciliacao[]
   contascorrentes                                     contascorrentes[]
   depdin                                              depdin[]
   extratos                                            extratos[]
-  lancdetail                                          lancdetail[]
+  lancdetail                                          lancdetail[]          @ignore
   pag                                                 pag[]
   rec                                                 rec[]
   sangriacaixa                                        sangriacaixa[]
   sangriachtroco                                      sangriachtroco[]
   tickets                                             tickets[]
   ticketvaledetail                                    ticketvaledetail?
-  trocoturno                                          trocoturno[]
+  trocoturno                                          trocoturno[]          @ignore
 
   @@index([CONTABIL_SEQUENCIAL], map: "FK_CONTAS_CONTABIL")
 }
@@ -1799,6 +1954,8 @@ model contascorrentes {
   OBJ_CONTABIL_SEQUENCIAL String?               @db.VarChar(1)
   CONVENIO                String?               @db.VarChar(15)
   NUM_CARTEIRA            String?               @db.VarChar(3)
+  CNTINSERT               Int?
+  CNTUPDATE               Int?
   contas                  contas                @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_19")
   bancos                  bancos                @relation(fields: [CODBANCO], references: [CODBANCO], onDelete: NoAction, onUpdate: NoAction, map: "FK_20")
   plano_conta_contabil    plano_conta_contabil? @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_CONTASCORRENTES_2")
@@ -1813,7 +1970,7 @@ model cotacao {
   CODFORNECEDOR Int
   DATA          DateTime  @db.Date
   OBSERVACAO    String?   @db.VarChar(200)
-  VALOR         Float?
+  VALOR         Float?    @db.Float
   CONTATO       String?   @db.VarChar(30)
   CONDICAOPAGTO String?   @db.VarChar(30)
   PRAZOENTREGA  String?   @db.VarChar(30)
@@ -1821,6 +1978,8 @@ model cotacao {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model cp {
@@ -1845,6 +2004,8 @@ model cp {
   NFCOMPRA_CP   String?   @db.VarChar(9)
   CODCOMPRA_CP  Int?
   CODDETALCONTA Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model cr {
@@ -1862,8 +2023,8 @@ model cr {
   SELECIONADOCR    String?   @db.Char(1)
   CODTURNO         Int?
   VALORRECEBIDOCR  Float?
-  JUROSCR          Float?
-  DESCONTOCR       Float?
+  JUROSCR          Float?    @db.Float
+  DESCONTOCR       Float?    @db.Float
   CODEMPVF         Int?
   CODTIPOREC       Int?
   TIPOCOB          String?   @db.Char(1)
@@ -1873,30 +2034,33 @@ model cr {
   CODCAIXA         Int?
   CODBOLETO        Int?
   DATAVENCCOBRANCA DateTime? @db.Date
-  clientes         clientes? @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_21")
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
   faturas          faturas?  @relation(fields: [CODFATURA], references: [CODFATURA], onDelete: NoAction, onUpdate: NoAction, map: "FK_85")
 
-  @@index([CODCLIENTE], map: "FK_21")
-  @@index([CODFATURA], map: "FK_85")
+  @@index([CODCLIENTE], map: "RDB$FOREIGN50")
+  @@index([CODFATURA], map: "RDB$FOREIGN51")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model creditotransportar {
   DATAINICIALPERIODO          DateTime  @db.Date
   DATAFINALPERIODO            DateTime  @db.Date
-  VALORDEBITOPIS              Float?
-  VALORCREDITOPARCIALPIS      Float?
-  VALORCREDITOPIS             Float?
-  VALORCREDITOCOFINS          Float?
-  VALORCREDITOPARCIALCOFINS   Float?
-  VALORCREDITOREPASSADOPIS    Float?
-  VALORCREDITOREPASSADOCOFINS Float?
-  VALORDEBITOCOFINS           Float?
+  VALORDEBITOPIS              Float?    @db.Float
+  VALORCREDITOPARCIALPIS      Float?    @db.Float
+  VALORCREDITOPIS             Float?    @db.Float
+  VALORCREDITOCOFINS          Float?    @db.Float
+  VALORCREDITOPARCIALCOFINS   Float?    @db.Float
+  VALORCREDITOREPASSADOPIS    Float?    @db.Float
+  VALORCREDITOREPASSADOCOFINS Float?    @db.Float
+  VALORDEBITOCOFINS           Float?    @db.Float
   FLGCREDITOALTERADO          String    @db.VarChar(1)
   CREDITOTRANSPORTAR_ID       Int?
   FLGLOG                      String?   @db.VarChar(1)
   DATAALTERACAO               DateTime? @db.Date
   CODEMP                      Int?
+  CNTINSERT                   Int?
+  CNTUPDATE                   Int?
 
   @@ignore
 }
@@ -1927,6 +2091,29 @@ model cte {
   OBSCTE                 String?   @db.VarChar(5000)
   CODEMP                 Int?
   DATAALTERACAO          DateTime? @db.Date
+  TIPOSERVICO            Int?
+  CODCFOP                String?   @db.VarChar(4)
+  FRETEPORCONTA          Int?
+  RNTRC_TRANSPORTADOR    String?   @db.VarChar(9)
+  VALORTOTAL             Decimal?  @db.Decimal(15, 2)
+  VALORFRETE             Decimal?  @db.Decimal(15, 2)
+  OBSFISCO               String?   @db.VarChar(5000)
+  CTEPROTOCOLO           String?   @db.VarChar(20)
+  CHCTEREF               String?   @db.VarChar(50)
+  CCT                    Int?
+  MODAL                  Int?
+  CTERECIBO              String?   @db.VarChar(20)
+  LOGINUSUARIO           String?   @db.VarChar(20)
+  INFADICIONALTRANSP     String?   @db.VarChar(15)
+  INFADICIONALSERVICO    String?   @db.VarChar(30)
+  FUNCEMISSOR            String?   @db.VarChar(20)
+  TIPOPERIODOENTREGA     Int?
+  DATAENTREGA            DateTime? @db.Date
+  HORAENTREGA            DateTime? @db.Date
+  DATAPREVISAOENTREGA    DateTime? @db.Date
+  HORAPREVISAOENTREGA    DateTime? @db.Date
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
 }
 
 model ctecarga {
@@ -1940,17 +2127,21 @@ model ctecarga {
   PESOLIQUIDOTOTAL    Decimal? @db.Decimal(15, 2)
   QTDVOLUMES          Decimal? @db.Decimal(15, 2)
   CHAVEDOC            String?  @db.VarChar(50)
+  UNDMEDIDA           Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@id([CTECARGAID, SEQITEM])
 }
 
 model dados_ajuste_icms {
-  COD_AJUSTE_ICMS  String       @id @db.VarChar(3)
-  DESC_AJUSTE_ICMS String?      @db.VarChar(50)
-  FLGLOG           String?      @db.VarChar(1)
-  DATAALTERACAO    DateTime?    @db.Date
+  COD_AJUSTE_ICMS  String    @id @db.VarChar(3)
+  DESC_AJUSTE_ICMS String?   @db.VarChar(50)
+  FLGLOG           String?   @db.VarChar(1)
+  DATAALTERACAO    DateTime? @db.Date
   CODEMP           Int?
-  ajusteicms       ajusteicms[]
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -1965,6 +2156,8 @@ model debitocliente {
   FLGLOG               String?   @db.VarChar(1)
   CODEMP               Int?
   DATAALTERACAO        DateTime? @db.Date
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@ignore
 }
@@ -1975,6 +2168,8 @@ model departamentos {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model depdin {
@@ -1988,6 +2183,8 @@ model depdin {
   DATADEPBIN    DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   contas        contas   @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_22")
 
   @@index([CODCONTA], map: "FK_22")
@@ -2005,6 +2202,8 @@ model desccartaobis {
   DATAALTERACAO   DateTime? @db.Date
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
   produtos        produtos  @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_23")
 
   @@index([CODPROD], map: "FK_23")
@@ -2020,6 +2219,8 @@ model descgrupocliente {
   VALORDESC     Float?
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODCLIENTE, CODGRUPO, TIPOPAG])
 }
@@ -2034,8 +2235,9 @@ model descprodcliente {
   VALORDESC     Float?
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   produtos      produtos @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_24")
-  clientes      clientes @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_25")
 
   @@id([CODCLIENTE, CODPROD, TIPOPAG])
   @@index([CODPROD], map: "FK_24")
@@ -2050,6 +2252,8 @@ model descvaucher {
   DATAALTERACAO   DateTime @db.Date
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
   produtos        produtos @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_26")
   emptaxi         emptaxi  @relation(fields: [CODEMPTAXI], references: [CODEMPTAXI], onDelete: NoAction, onUpdate: NoAction, map: "FK_27")
 
@@ -2070,6 +2274,8 @@ model descvendacliente {
   JUSTIFICATIVA       String   @db.VarChar(300)
   NUMCUPOM            Int?
   DESCVENDACLIENTE_ID Int      @id
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
   clientes            clientes @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_DESCVENDACLIENTE_CODCLIENTE")
   vendas              vendas   @relation(fields: [CODVENDA], references: [CODVENDA], onDelete: NoAction, onUpdate: NoAction, map: "FK_DESCVENDACLIENTE_CODVENDA")
 
@@ -2101,6 +2307,8 @@ model despesas {
   CODCOMPRA_CP   Int?
   CODAJUSTEICMS  String?   @db.VarChar(10)
   CODFUNC        Int?
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
   tipodes        tipodes   @relation(fields: [CODTIPODES], references: [CODTIPODES], onDelete: NoAction, onUpdate: NoAction, map: "FK_28")
 
   @@index([CODTIPODES], map: "FK_28")
@@ -2112,14 +2320,18 @@ model destinosangria {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model difabast {
-  CODBICO       Float     @id
-  VALORABAST    Float?
+  CODBICO       Float     @id @db.Float
+  VALORABAST    Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model difdespesas {
@@ -2135,6 +2347,8 @@ model difdespesas {
   CODFUNC       Int?
   DATAALTERACAO DateTime? @db.Date
   CODFORNECEDOR Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   tipodes       tipodes   @relation(fields: [CODTIPODES], references: [CODTIPODES], onDelete: NoAction, onUpdate: NoAction, map: "FK_29")
   turnos        turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_30")
 
@@ -2145,11 +2359,13 @@ model difdespesas {
 
 model difenc {
   CODBICO       Int       @id
-  VLRDIF        Float?
-  VLRFIM        Float?
+  VLRDIF        Float?    @db.Float
+  VLRFIM        Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model difencerrantes {
@@ -2158,6 +2374,8 @@ model difencerrantes {
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
   turnos         turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_31")
 }
 
@@ -2173,13 +2391,14 @@ model difentradas {
   CODFUNC       Int?
   CODCLIENTE    Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   turnos        turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_32")
 
   @@id([CODTURNO, CODENT, CODCAIXA])
   @@unique([CODTURNO, CODENT, CODGRUPOENT, CODCAIXA], map: "DIFENTRADAS0")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model diffunc {
   CODTURNO      Int
   CODFUNC       Int
@@ -2189,10 +2408,13 @@ model diffunc {
   CODEMP        Int?
   CODCAIXA      Int
   DATAALTERACAO DateTime?    @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   funcionarios  funcionarios @relation(fields: [CODFUNC], references: [CODFUNC], onDelete: NoAction, onUpdate: NoAction, map: "FK_33")
+  turnos        turnos       @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_83")
 
+  @@id([CODTURNO, CODFUNC, CODCAIXA])
   @@index([CODFUNC], map: "FK_33")
-  @@ignore
 }
 
 model docfiscais {
@@ -2210,6 +2432,8 @@ model docfiscais {
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
   CODDOCNFISCAL   Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model docnaofiscais {
@@ -2229,6 +2453,8 @@ model docnaofiscais {
   TIPODOC         String?   @db.VarChar(2)
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@index([DATAHORAEMISSAO], map: "DOCNAOFISCAIS_IDX1")
   @@index([CODVENDA], map: "DOCNAOFISCAIS_IDXCODVENDA")
@@ -2256,6 +2482,8 @@ model ecf {
   USUARIOECF       String?   @db.VarChar(2)
   DATAALTERACAO    DateTime? @db.Date
   DESATIVADO       String?   @db.VarChar(1)
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -2268,6 +2496,8 @@ model emailcotacao {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -2278,6 +2508,8 @@ model empresas {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model emptaxi {
@@ -2303,6 +2535,8 @@ model emptaxi {
   CODTIPODES        Int?
   FLGLOG            String?       @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   clientes          clientes[]
   descvaucher       descvaucher[]
   vauchers          vauchers[]
@@ -2327,6 +2561,8 @@ model empticket {
   NUMTIPOFECHAMENTO  Int?
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   cidades            cidades?  @relation(fields: [CODCIDADE], references: [CODCIDADE], onDelete: NoAction, onUpdate: NoAction, map: "FK_34")
   ufs                ufs?      @relation(fields: [SIGLAUF], references: [SIGLAUF], onDelete: NoAction, onUpdate: NoAction, map: "FK_35")
   tickets            tickets[]
@@ -2354,6 +2590,8 @@ model empvf {
   NUMTIPOFECHAMENTO Int?
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   cidades           cidades?  @relation(fields: [CODCIDADE], references: [CODCIDADE], onDelete: NoAction, onUpdate: NoAction, map: "FK_36")
   ufs               ufs?      @relation(fields: [SIGLAUF], references: [SIGLAUF], onDelete: NoAction, onUpdate: NoAction, map: "FK_37")
 
@@ -2378,8 +2616,10 @@ model encerrantesdia {
   LOG            String?   @db.VarChar(2)
   CODECFABRECTRL String?   @db.VarChar(1)
   DATADADOS      DateTime? @db.Date
-  DATAALTERACAO  DateTime? @db.Date
   SEQMANUT       Int
+  DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 
   @@id([CODENC, CODBICO, SEQMANUT])
 }
@@ -2394,15 +2634,19 @@ model encerrantesmanut {
   LOGINUSUARIO  String    @db.VarChar(20)
   DATAALTERACAO DateTime  @db.Date
   FLGLOG        String?   @default("N") @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model encerrantesz {
   DATAZ         DateTime  @db.Date
   CODBICO       Int
-  ENCERRANTE    Float?
+  ENCERRANTE    Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([DATAZ, CODBICO])
 }
@@ -2419,6 +2663,8 @@ model entradas {
   CODEMP        Int?
   CODCLIENTE    Int?
   CODTIPOREC    Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   gruposent     gruposent @relation(fields: [CODGRUPOENT], references: [CODGRUPOENT], onDelete: NoAction, onUpdate: NoAction, map: "FK_38")
 
   @@index([CODGRUPOENT], map: "FK_38")
@@ -2434,14 +2680,16 @@ model entradasblocof {
   MODELO        String?   @db.VarChar(2)
   CHNFE         String?   @db.VarChar(50)
   DATAENTRADA   DateTime  @db.Date
-  BASEPIS       Float?
-  VALORPIS      Float?
-  BASECOFINS    Float?
-  VALORCOFINS   Float?
-  VALORTOTAL    Float?
+  BASEPIS       Float?    @db.Float
+  VALORPIS      Float?    @db.Float
+  BASECOFINS    Float?    @db.Float
+  VALORCOFINS   Float?    @db.Float
+  VALORTOTAL    Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model escritorio {
@@ -2457,6 +2705,8 @@ model escritorio {
   DATAALTERACAO   DateTime? @db.Date
   LOGINUSUARIO    String?   @db.VarChar(20)
   NUMPARCELAVENDA Int
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -2471,6 +2721,8 @@ model estoquesfisco {
   LOG           String?   @db.VarChar(2)
   DATAALTERACAO DateTime? @db.Date
   EFRECIBO      String?   @db.VarChar(50)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model estoquesitensfisco {
@@ -2483,6 +2735,8 @@ model estoquesitensfisco {
   CODEMP        Int?
   LOG           String?   @db.VarChar(2)
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODESTOQUE, CODPROD])
 }
@@ -2499,6 +2753,8 @@ model estoquesprod {
   CODECF           String?   @db.VarChar(1)
   LOG              String?   @db.VarChar(2)
   DATAALTERACAO    DateTime? @db.Date
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 model estoquestanque {
@@ -2513,6 +2769,8 @@ model estoquestanque {
   CODECF         String?   @db.VarChar(1)
   LOG            String?   @db.VarChar(2)
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 model estoquesterminal {
@@ -2523,6 +2781,8 @@ model estoquesterminal {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   produtos      produtos @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "estoquesterminal_ibfk_1")
 
   @@id([CODTERMINAL, CODPROD])
@@ -2538,11 +2798,13 @@ model esttanquelog {
   DATAMEDICAO              DateTime? @db.Date
   ESTATUALTANQUEESCRITURAL Float?
   ESTATUALTANQUEFISICO     Float?
-  ESTATUALTANQUEDIFERENCA  Float?    @db.Float
   FLGLOG                   String?   @db.VarChar(1)
   CODEMP                   Int?
   ENTRADAEXTEMPORANEA      Float?
   ESTFISICOSEMENTRADA      Float?
+  CNTINSERT                Int?
+  CNTUPDATE                Int?
+  ESTATUALTANQUEDIFERENCA  Float?    @db.Float
 }
 
 model esttqescritural {
@@ -2555,6 +2817,8 @@ model esttqescritural {
   CODPROD             String?   @db.VarChar(14)
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@id([CODCAIXA, CODTANQUE])
 }
@@ -2569,6 +2833,8 @@ model esttqfisico {
   CODPROD       String?   @db.VarChar(14)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   caixas        caixas    @relation(fields: [CODCAIXA], references: [CODCAIXA], onDelete: NoAction, onUpdate: NoAction, map: "esttqfisico_ibfk_1")
   tanques       tanques   @relation(fields: [CODTANQUE], references: [CODTANQUE], onDelete: NoAction, onUpdate: NoAction, map: "esttqfisico_ibfk_2")
 
@@ -2583,6 +2849,8 @@ model excessocaixa {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   turnos        turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_39")
   vendas        vendas    @relation(fields: [CODVENDA], references: [CODVENDA], onDelete: NoAction, onUpdate: NoAction, map: "FK_40")
 
@@ -2605,6 +2873,8 @@ model extratos {
   TOTALDISPONIVELEXT Float?
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   contas             contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_41")
 
   @@index([CODCONTA], map: "FK_41")
@@ -2622,10 +2892,9 @@ model faturas {
   DATAALTERACAO     DateTime? @db.Date
   LOGINUSUARIO      String?   @db.VarChar(20)
   DATAVENCCOBRANCA  DateTime? @db.Date
-  clientes          clientes  @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_42")
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   cr                cr[]
-
-  @@index([CODCLIENTE], map: "FK_42")
 }
 
 model faturashc {
@@ -2641,6 +2910,8 @@ model faturashc {
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 model fiadorcliente {
@@ -2655,6 +2926,8 @@ model fiadorcliente {
   DATAALTERACAO DateTime? @db.Date
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODFIADOR, CODCLIENTE])
 }
@@ -2665,6 +2938,8 @@ model forma_de_lancamento {
   FLGLOG              String?       @db.VarChar(1)
   DATAALTERACAO       DateTime?     @db.Date
   CODEMP              Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
   lancamentos         lancamentos[]
 }
 
@@ -2691,6 +2966,8 @@ model fornecedores {
   CODEMP               Int?
   CONTABIL_SEQUENCIAL  String?               @db.VarChar(60)
   DESATIVAFORNEC       String?               @db.VarChar(1)
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   ufs                  ufs?                  @relation(fields: [SIGLAUF], references: [SIGLAUF], onDelete: NoAction, onUpdate: NoAction, map: "FK_43")
   cidades              cidades?              @relation(fields: [CODCIDADE], references: [CODCIDADE], onDelete: NoAction, onUpdate: NoAction, map: "FK_44")
   plano_conta_contabil plano_conta_contabil? @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_FORNEC_CONTABIL")
@@ -2711,13 +2988,15 @@ model fornecedoresxml {
   CST           String?   @db.VarChar(3)
   CSTPIS        String?   @db.VarChar(2)
   CSTCOFINS     String?   @db.VarChar(2)
-  PERCPIS       Float?
-  PERCCOFINS    Float?
-  ICMS          Float?
-  ICMSRETIDO    Float?
+  PERCPIS       Float?    @db.Float
+  PERCCOFINS    Float?    @db.Float
+  ICMS          Float?    @db.Float
+  ICMSRETIDO    Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODFORNEC, CODPRODFORNEC, CODPROD])
 }
@@ -2733,11 +3012,11 @@ model frete {
   SUBSERIENF        String?   @db.VarChar(3)
   NUMERONF          String?   @db.VarChar(9)
   CFOP              String?   @db.VarChar(4)
-  TOTALNF           Float?
-  BASEICMS          Float?
-  VLICMS            Float?
-  ISENTO            Float?
-  OUTRAS            Float?
+  TOTALNF           Float?    @db.Float
+  BASEICMS          Float?    @db.Float
+  VLICMS            Float?    @db.Float
+  ISENTO            Float?    @db.Float
+  OUTRAS            Float?    @db.Float
   CIFFOB            String?   @db.Char(1)
   CANCELA           String?   @db.Char(1)
   LOGINUSUARIO      String    @db.VarChar(20)
@@ -2762,6 +3041,8 @@ model frete {
   VLPIS             Float?
   VLCOFINS          Float?
   CODCOMPRA_CP      Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model funcionarios {
@@ -2791,9 +3072,10 @@ model funcionarios {
   INICIOJORNADA DateTime?   @db.Date
   FIMJORNADA    DateTime?   @db.Date
   SENHAFUNC     String?     @db.VarChar(8)
-  caixas        caixas[]
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   ccfunc        ccfunc[]
-  diffunc       diffunc[]   @ignore
+  diffunc       diffunc[]
   turnos        turnos[]
   valesfunc     valesfunc[]
 }
@@ -2805,41 +3087,41 @@ model gamreg60m {
   NUMEROUDOC        String    @db.VarChar(10)
   CONTRO            String    @db.VarChar(3)
   CONTREDZ          String    @db.VarChar(10)
-  VALORVENDABRUTA   Float
+  VALORVENDABRUTA   Float     @db.Float
   VALORTOTGERAL     Decimal?  @db.Decimal(15, 2)
-  ST1               Float?
-  ST2               Float?
-  ST3               Float?
-  ST4               Float?
-  ST5               Float?
-  ST6               Float?
-  VALORST1          Float?
-  VALORST2          Float?
-  VALORST3          Float?
-  VALORST4          Float?
-  VALORST5          Float?
-  VALORST6          Float?
-  SUBSTRIB          Float?
-  ISENTO            Float?
-  NINCID            Float?
-  CANCEL            Float?
-  DESCONTOS         Float?
-  ISSQN             Float?
+  ST1               Float?    @db.Float
+  ST2               Float?    @db.Float
+  ST3               Float?    @db.Float
+  ST4               Float?    @db.Float
+  ST5               Float?    @db.Float
+  ST6               Float?    @db.Float
+  VALORST1          Float?    @db.Float
+  VALORST2          Float?    @db.Float
+  VALORST3          Float?    @db.Float
+  VALORST4          Float?    @db.Float
+  VALORST5          Float?    @db.Float
+  VALORST6          Float?    @db.Float
+  SUBSTRIB          Float?    @db.Float
+  ISENTO            Float?    @db.Float
+  NINCID            Float?    @db.Float
+  CANCEL            Float?    @db.Float
+  DESCONTOS         Float?    @db.Float
+  ISSQN             Float?    @db.Float
   VERSAOSB          String?   @db.VarChar(10)
   DATAHORAINSTALSB  DateTime? @db.Date
   DATAHORAEMISSAORZ DateTime? @db.Date
   MFADICIONAL       String?   @db.VarChar(1)
   NUMUSUARIO        String?   @db.VarChar(2)
   PARAMECFISSQN     String?   @db.VarChar(1)
-  ALIQISSQN1        Float?
-  ALIQISSQN2        Float?
-  ALIQISSQN3        Float?
-  ISSQN2            Float?
-  ISSQN3            Float?
+  ALIQISSQN1        Float?    @db.Float
+  ALIQISSQN2        Float?    @db.Float
+  ALIQISSQN3        Float?    @db.Float
+  ISSQN2            Float?    @db.Float
+  ISSQN3            Float?    @db.Float
   DATAMOVIMENTO     DateTime? @db.Date
   NFABECF           String?   @db.VarChar(20)
   LOG               String?   @db.VarChar(2)
-  ACRESCIMOS        Float?
+  ACRESCIMOS        Float?    @db.Float
   SUBSISSQN         Float?
   ISENTOISSQN       Float?
   NIISSQN           Float?
@@ -2855,10 +3137,12 @@ model gamreg60m {
   DESCONTOCNF       Float?
   ACRESCIMOCNF      Float?
   CANCELCNF         Float?
-  DATAALTERACAO     DateTime? @db.Date
   ENVIOSEF          String?   @db.Char(1)
   RZPROTOCOLO       String?   @db.VarChar(20)
   RZRECIBO          String?   @db.VarChar(50)
+  DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([DATADADOS, CODECF, CONTREDZ])
 }
@@ -2871,11 +3155,11 @@ model gamreg61 {
   SUBSERIE      String?   @db.VarChar(4)
   NUMINICIAL    Int
   NUMFINAL      Int
-  VALORTOTAL    Float
-  BASEICMS      Float
-  VALORICMS     Float
-  ISENTA        Float
-  OUTRAS        Float
+  VALORTOTAL    Float     @db.Float
+  BASEICMS      Float     @db.Float
+  VALORICMS     Float     @db.Float
+  ISENTA        Float     @db.Float
+  OUTRAS        Float     @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
@@ -2887,6 +3171,8 @@ model gamreg61 {
   NINCID        Decimal?  @db.Decimal(15, 2)
   SUBSTRIB      Decimal?  @db.Decimal(15, 2)
   ISSQN         Decimal?  @db.Decimal(15, 2)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([DATAEMISSAO, MODELO, SERIE])
 }
@@ -2897,6 +3183,8 @@ model gruposagend {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   agend         agend[]
 }
 
@@ -2907,6 +3195,8 @@ model gruposent {
   DATAALTERACAO DateTime   @db.Date
   FLGLOG        String?    @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   entradas      entradas[]
 }
 
@@ -2923,6 +3213,8 @@ model gruposprod {
   CODPLANOCONTAS  Int?
   CODPLANOCMV     Int?
   CODPLANOVENDAS  Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
   produtos        produtos[]
   totalizadores   totalizadores[]
 }
@@ -2936,27 +3228,30 @@ model historico_padrao {
   FLGLOG              String?   @db.VarChar(1)
   DATAALTERACAO       DateTime? @db.Date
   CODEMP              Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model ibpt {
   CODIGO               Int
-  CODNCM               String    @id @db.VarChar(10)
-  ALIQNACIONALFEDERAL  Decimal?  @db.Decimal(15, 2)
-  ALIQIMPORTADOFEDERAL Decimal?  @db.Decimal(15, 2)
-  ALIQESTADUAL         Decimal?  @db.Decimal(15, 2)
-  CODEMP               Int
-  FLGLOG               String?   @db.VarChar(1)
-  DATAALTERACAO        DateTime? @db.Date
-  VERSAOARQUIVO        String?   @db.VarChar(10)
+  CODNCM               String   @id @db.VarChar(10)
+  ALIQNACIONALFEDERAL  Decimal? @db.Decimal(15, 2)
+  ALIQIMPORTADOFEDERAL Decimal? @db.Decimal(15, 2)
+  ALIQESTADUAL         Decimal? @db.Decimal(15, 2)
+  VERSAOARQUIVO        String?  @db.VarChar(10)
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 }
 
 model imageslistviewmobile {
   ID            Int       @id
   IMAGEM        Bytes?    @db.Blob
   NOMEIMAGEM    String?   @db.VarChar(20)
+  CODEMP        Int
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
-  CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model influencia_recolhimento {
@@ -2965,6 +3260,8 @@ model influencia_recolhimento {
   FLGLOG                       String?      @db.VarChar(1)
   DATAALTERACAO                DateTime?    @db.Date
   CODEMP                       Int?
+  CNTINSERT                    Int?
+  CNTUPDATE                    Int?
   ajusteicms                   ajusteicms[]
 }
 
@@ -2972,26 +3269,30 @@ model itemcotacao {
   CODITEMCOTACAO Int       @id
   CODCOTACAO     Int
   CODPRODUTO     String    @db.VarChar(14)
-  QTDE           Float?
-  VALOR          Float?
-  TOTAL          Float?
+  QTDE           Float?    @db.Float
+  VALOR          Float?    @db.Float
+  TOTAL          Float?    @db.Float
   SIGLAUNIDADE   String?   @db.VarChar(20)
   STATUS         String?   @db.VarChar(1)
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 model itempedcompra {
   CODITEMPEDIDO Int       @id
   CODPEDIDO     Int
   CODPRODUTO    String    @db.VarChar(14)
-  QTDE          Float?
-  VALOR         Float?
+  QTDE          Float?    @db.Float
+  VALOR         Float?    @db.Float
   UNIDADEMEDIDA String?   @db.VarChar(30)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model itensblocof {
@@ -3006,23 +3307,23 @@ model itensblocof {
   INDOPER            Int?
   CSTPIS             String?  @db.VarChar(2)
   CSTCOFINS          String?  @db.VarChar(2)
-  PERCPIS            Float?
-  PERCCOFINS         Float?
-  BASEPIS            Float?
-  BASECOFINS         Float?
-  VALORPIS           Float?
-  VALORCOFINS        Float?
-  VALORITEM          Float?
-  VALORTOTALPROD     Float?
+  PERCPIS            Float?   @db.Float
+  PERCCOFINS         Float?   @db.Float
+  BASEPIS            Float?   @db.Float
+  BASECOFINS         Float?   @db.Float
+  VALORPIS           Float?   @db.Float
+  VALORCOFINS        Float?   @db.Float
+  VALORITEM          Float?   @db.Float
+  VALORTOTALPROD     Float?   @db.Float
   NATBCIMOBILIZADO   String?  @db.VarChar(2)
   TIPOIMOB           String?  @db.VarChar(2)
   TIPOUTILIZACAO     Int?
-  QUANTIDADE         Float?
+  QUANTIDADE         Float?   @db.Float
   DATAALTERACAO      DateTime @db.Date
-  VALORPARCELAPIS    Float?
-  VALORPARCELACOFINS Float?
-  VALORRETIDOPIS     Float?
-  VALORRETIDOCOFINS  Float?
+  VALORPARCELAPIS    Float?   @db.Float
+  VALORPARCELACOFINS Float?   @db.Float
+  VALORRETIDOPIS     Float?   @db.Float
+  VALORRETIDOCOFINS  Float?   @db.Float
   TIPOCREDITO        String?  @db.VarChar(3)
   INDNPARC           Int?
   INDNATRET          String?  @db.VarChar(2)
@@ -3034,6 +3335,8 @@ model itensblocof {
   NMESES             Int?
   FLGLOG             String?  @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 
   @@id([CODENTRADA, NUMITEM])
 }
@@ -3047,33 +3350,35 @@ model itenscompra {
   LOGINUSUARIO         String      @db.VarChar(20)
   DATAALTERACAO        DateTime    @db.Date
   CODTANQUE            Int?
-  ALIQICMS             Float?
-  ALIQICMSSUB          Float?
+  ALIQICMS             Float?      @db.Float
+  ALIQICMSSUB          Float?      @db.Float
   QTDEUNID             Int?
-  CUSTOMEDIO           Float?
+  CUSTOMEDIO           Float?      @db.Float
   CODCFOP              String?     @db.VarChar(6)
   CST                  String?     @db.VarChar(5)
-  PRECOCUSTO           Float?
-  BASEICMS             Float?
-  VALORICMS            Float
-  BASEICMSSUBS         Float?
-  VALORICMSSUBS        Float?
-  BASEIPI              Float?
-  VALORIPI             Float?
-  BASEPIS              Float?
-  VALORPIS             Decimal?    @db.Decimal(15, 2)
-  PERCPIS              Float?
-  BASECOFINS           Float?
-  VALORCOFINS          Decimal?    @db.Decimal(15, 2)
-  PERCCOFINS           Float?
+  PRECOCUSTO           Float?      @db.Float
+  BASEICMS             Float?      @db.Float
+  VALORICMS            Float?      @db.Float
+  BASEICMSSUBS         Float?      @db.Float
+  VALORICMSSUBS        Float?      @db.Float
+  BASEIPI              Float?      @db.Float
+  VALORIPI             Float?      @db.Float
+  BASEPIS              Float?      @db.Float
+  VALORPIS             Float?      @db.Float
+  PERCPIS              Float?      @db.Float
+  BASECOFINS           Float?      @db.Float
+  VALORCOFINS          Float?      @db.Float
+  PERCCOFINS           Float?      @db.Float
   CSTPIS               String?     @db.VarChar(2)
   CSTCOFINS            String?     @db.VarChar(2)
   FLGLOG               String?     @db.VarChar(1)
   CODEMP               Int?
-  DSCITEM              Float?
+  DSCITEM              Float?      @db.Float
   VALOROUTRASDESP      Float?
   NUMNOTA_NF_DEVOLUCAO Int?
   FRETE                Float?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   produtos             produtos    @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_45")
   comprasprod          comprasprod @relation(fields: [CODCOMPRAPROD], references: [CODCOMPRAPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_46")
   cfop                 cfop?       @relation(fields: [CODCFOP], references: [CODCFOP], onDelete: Cascade, map: "FK_ITENSCOMPRA_1")
@@ -3092,42 +3397,42 @@ model itenscompramatconsumo {
   LOGINUSUARIO            String   @db.VarChar(20)
   DATAALTERACAO           DateTime @db.Date
   CODTANQUE               Int?
-  ALIQICMS                Float?
-  ALIQICMSSUB             Float?
+  ALIQICMS                Float?   @db.Float
+  ALIQICMSSUB             Float?   @db.Float
   QTDEUNID                Int?
-  CUSTOFINAL              Float?
-  CUSTOMEDIO              Float?
+  CUSTOFINAL              Float?   @db.Float
+  CUSTOMEDIO              Float?   @db.Float
   CODCFOP                 String?  @db.VarChar(6)
   CST                     String?  @db.VarChar(5)
-  BASEICMS                Float?
-  VALORICMS               Float?
-  BASEICMSSUBS            Float?
-  VALORICMSSUBS           Float?
-  BASEIPI                 Float?
-  VALORIPI                Float?
-  BASEPIS                 Float?
-  VALORPIS                Decimal? @db.Decimal(15, 2)
-  PERCPIS                 Float?
-  BASECOFINS              Float?
-  VALORCOFINS             Decimal? @db.Decimal(15, 2)
-  PERCCOFINS              Float?
+  BASEICMS                Float?   @db.Float
+  VALORICMS               Float?   @db.Float
+  BASEICMSSUBS            Float?   @db.Float
+  VALORICMSSUBS           Float?   @db.Float
+  BASEIPI                 Float?   @db.Float
+  VALORIPI                Float?   @db.Float
+  BASEPIS                 Float?   @db.Float
+  VALORPIS                Float?   @db.Float
+  PERCPIS                 Float?   @db.Float
+  BASECOFINS              Float?   @db.Float
+  VALORCOFINS             Float?   @db.Float
+  PERCCOFINS              Float?   @db.Float
   CSTPIS                  String?  @db.VarChar(2)
   CSTCOFINS               String?  @db.VarChar(2)
   FLGLOG                  String?  @db.VarChar(1)
   CODEMP                  Int?
-  PERCPISCREDITO          Float?
-  PERCCOFINSCREDITO       Float?
-  DSCITEM                 Float?
+  PERCPISCREDITO          Float?   @db.Float
+  PERCCOFINSCREDITO       Float?   @db.Float
+  DSCITEM                 Float?   @db.Float
   NUMNOTA_NF_DEVOLUCAO    Int?
   FRETE                   Float?
   TOTALITEM               Decimal? @db.Decimal(15, 2)
-  PERCICMSCREDITO         Float?
+  PERCICMSCREDITO         Float?   @db.Float
   OUTRASDEDUCOES          Float?
   ENERGIAINJETADA         Float?
-  cfop                    cfop?    @relation(fields: [CODCFOP], references: [CODCFOP], onDelete: NoAction, map: "FK_ITENSCOMPRAMATCONSUMO_1")
+  CNTINSERT               Int?
+  CNTUPDATE               Int?
 
   @@id([CODCOMPRAPRODMATCONSUMO, NUMITEM])
-  @@index([CODCFOP], map: "FK_ITENSCOMPRAMATCONSUMO_1")
 }
 
 model itenscte {
@@ -3136,6 +3441,7 @@ model itenscte {
   CODPROD                String?  @db.VarChar(14)
   QTDITEM                Decimal? @db.Decimal(15, 6)
   CST                    String?  @db.VarChar(2)
+  VALORFRETE             Decimal? @db.Decimal(15, 2)
   VALORTOTAL             Decimal? @db.Decimal(15, 2)
   BASEICMS               Decimal? @db.Decimal(15, 2)
   PERCICMS               Decimal? @db.Decimal(15, 2)
@@ -3146,7 +3452,9 @@ model itenscte {
   PERCICMSOUTRAUF        Decimal? @db.Decimal(15, 2)
   VALORICMSOUTRAUF       Decimal? @db.Decimal(15, 2)
   REDUCAOBASEICMSOUTRAUF Decimal? @db.Decimal(15, 2)
-  VALORFRETE             Decimal? @db.Decimal(15, 2)
+  VALOROUTRASDESPESAS    Decimal? @db.Decimal(15, 2)
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
 
   @@id([CTEID, SEQITEM])
 }
@@ -3172,8 +3480,8 @@ model itensfrete {
   ALIQICMSSUB       Float?
   BASEICMSSUBS      Float?
   VALORICMSSUBS     Float?
-  PERCPISCREDITO    Float?
-  PERCCOFINSCREDITO Float?
+  PERCPISCREDITO    Float?    @db.Float
+  PERCCOFINSCREDITO Float?    @db.Float
   ALIQPIS           Float?
   ALIQCOFINS        Float?
   BASEPIS           Float?
@@ -3188,6 +3496,8 @@ model itensfrete {
   CTEREF            String?   @db.VarChar(50)
   CHCTE             String?   @db.VarChar(50)
   CODCOMPRAPROD     Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODCOMPRAFRETE, NUMITEM])
 }
@@ -3196,19 +3506,21 @@ model itensnfpista {
   NUMNOTA        Int
   SEQITEM        Int
   CODPROD        String?   @db.VarChar(14)
-  QTDITEM        Float?
+  QTDITEM        Float?    @db.Float
   UNIDADEITEM    String?   @db.VarChar(2)
   CST            String?   @db.VarChar(4)
-  ICMSTRIBALIQ   Float?
-  ICMSRETALIQ    Float?
-  VALORITEM      Float?
-  VALORLISTAUN   Float?
-  VALORLISTAITEM Float?
-  DESCITEM       Float?
-  VALORISS       Float?
+  ICMSTRIBALIQ   Float?    @db.Float
+  ICMSRETALIQ    Float?    @db.Float
+  VALORITEM      Float?    @db.Float
+  VALORLISTAUN   Float?    @db.Float
+  VALORLISTAITEM Float?    @db.Float
+  DESCITEM       Float?    @db.Float
+  VALORISS       Float?    @db.Float
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 
   @@id([NUMNOTA, SEQITEM])
 }
@@ -3247,7 +3559,8 @@ model itensnfse {
   VALORINSS                    Decimal?  @db.Decimal(15, 2)
   CSTPIS                       String?   @db.VarChar(2)
   CSTCOFINS                    String?   @db.VarChar(2)
-  FLGLOG                       String?   @db.VarChar(1)
+  CNTINSERT                    Int?
+  CNTUPDATE                    Int?
 
   @@id([NFSEID, SEQITEM, CODEMP])
 }
@@ -3259,20 +3572,20 @@ model itensnotafiscalmanual {
   QTDITEM                 Decimal?                  @db.Decimal(15, 6)
   UNIDADEITEM             String?                   @db.VarChar(2)
   CST                     String?                   @db.VarChar(2)
-  ICMSTRIBALIQ            Float?
-  ICMSRETALIQ             Float?
+  ICMSTRIBALIQ            Float?                    @db.Float
+  ICMSRETALIQ             Float?                    @db.Float
   VALORITEM               Decimal?                  @db.Decimal(15, 6)
-  VALORLISTAUN            Float?
-  VALORLISTAITEM          Float?
+  VALORLISTAUN            Float?                    @db.Float
+  VALORLISTAITEM          Float?                    @db.Float
   DESCITEM                Decimal?                  @db.Decimal(15, 2)
-  VALORISS                Float?
+  VALORISS                Float?                    @db.Float
   CST1                    String?                   @db.VarChar(5)
   TOTALITEMVENDA          Decimal?                  @db.Decimal(15, 2)
+  CODCFOP                 String?                   @db.VarChar(6)
   BASEICMS                Decimal?                  @db.Decimal(15, 2)
   VALORICMS               Decimal?                  @db.Decimal(15, 2)
   BASEICMSSUBS            Decimal?                  @db.Decimal(15, 2)
   VALORICMSSUBS           Decimal?                  @db.Decimal(15, 2)
-  CODCFOP                 String?                   @db.VarChar(6)
   BASEPIS                 Decimal?                  @db.Decimal(15, 2)
   VALORPIS                Decimal?                  @db.Decimal(15, 2)
   PERCPIS                 Decimal?                  @db.Decimal(15, 2)
@@ -3286,11 +3599,9 @@ model itensnotafiscalmanual {
   BAIXAESTOQUE            String?                   @db.VarChar(1)
   CODTANQUE               Int?
   VALOROUTRASDESP         Float?
-  DATAALTERACAO           DateTime?                 @db.Date
   CODBICO                 Int?
   ORIGEM_ITEM_PAF         String?                   @db.VarChar(1)
-  TIPO                    String?                   @db.Char(1)
-  LOG                     String?                   @db.VarChar(2)
+  DATAALTERACAO           DateTime?                 @db.Date
   BASEIPI                 Float?
   VALORIPI                Float?
   BASEICMSUFDEST          Decimal?                  @db.Decimal(15, 2)
@@ -3303,11 +3614,15 @@ model itensnotafiscalmanual {
   BASEFCPST               Decimal?                  @db.Decimal(15, 2)
   PERCFCPST               Decimal?                  @db.Decimal(15, 2)
   VALORFCPST              Decimal?                  @db.Decimal(15, 2)
+  TIPO                    String?                   @db.Char(1)
+  LOG                     String?                   @db.VarChar(2)
   PERCIPI                 Decimal?                  @db.Decimal(15, 2)
   CSTIPI                  String?                   @db.VarChar(2)
   IMPOSTOEST              Decimal?                  @db.Decimal(15, 2)
   IMPOSTOFED              Decimal?                  @db.Decimal(15, 2)
   INFADICIONAL            String?                   @db.VarChar(500)
+  CNTINSERT               Int?
+  CNTUPDATE               Int?
   notafiscalrelcupons_paf notafiscalrelcupons_paf[]
 
   @@id([NUMNOTA, SEQITEM])
@@ -3321,6 +3636,8 @@ model itensporpreco {
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 
   @@ignore
 }
@@ -3340,9 +3657,9 @@ model itensvenda {
   CODLOCPROD           Int?
   PRECOCOMDESCONTO     Float?
   TIPOPAG              String?   @db.VarChar(1)
-  PRECOCUSTO           Float?
+  PRECOCUSTO           Float?    @db.Float
   CODALIQ              Int?
-  PERCDESCONTO         Float?
+  PERCDESCONTO         Float?    @db.Float
   TOTALITEMVENDA       Decimal?  @db.Decimal(15, 2)
   TOTALDESCITEMVENDA   Decimal?  @db.Decimal(15, 2)
   TIPO                 String?   @db.VarChar(1)
@@ -3384,6 +3701,8 @@ model itensvenda {
   PONTOSPREMIA         Decimal?  @db.Decimal(15, 2)
   IMPOSTOFEDIBPT       Float?
   IMPOSTOESTIBPT       Float?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODVENDA, NUMITEMVENDA])
   @@index([CODBICO, HORAABAST], map: "ITENSVENDA_IDXCBDT")
@@ -3397,6 +3716,8 @@ model itensvendareposicaoefetuada {
   FLGLOG                String?   @db.VarChar(1)
   DATAALTERACAO         DateTime? @db.Date
   CODEMP                Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
 }
 
 model itensvendatemp {
@@ -3407,9 +3728,9 @@ model itensvendatemp {
   QTDITEMVENDA            Float?
   PRECOITEMVENDA          Float?
   DESCITEMVENDA           Float?
-  PRECOCUSTO              Float?
+  PRECOCUSTO              Float?    @db.Float
   CODALIQ                 Int?
-  PERCDESCONTO            Float?
+  PERCDESCONTO            Float?    @db.Float
   TOTALITEM               Decimal?  @db.Decimal(15, 2)
   TOTALDESCITEM           Decimal?  @db.Decimal(15, 2)
   TIPO                    String?   @db.VarChar(1)
@@ -3426,6 +3747,8 @@ model itensvendatemp {
   CODEMP                  Int?
   TOTALDESCVENDA          Decimal?  @db.Decimal(15, 2)
   TOTALACRESCVENDA        Decimal?  @db.Decimal(15, 2)
+  CNTINSERT               Int?
+  CNTUPDATE               Int?
 
   @@id([CODVENDA, NUMITEMVENDA])
 }
@@ -3445,9 +3768,9 @@ model itensvendaturno {
   CODLOCPROD           Int?
   PRECOCOMDESCONTO     Float?
   TIPOPAG              String?   @db.VarChar(1)
-  PRECOCUSTO           Float?
+  PRECOCUSTO           Float?    @db.Float
   CODALIQ              Int?
-  PERCDESCONTO         Float?
+  PERCDESCONTO         Float?    @db.Float
   TOTALITEMVENDA       Decimal   @db.Decimal(15, 2)
   TOTALDESCITEMVENDA   Decimal?  @db.Decimal(15, 2)
   TIPO                 String?   @db.VarChar(1)
@@ -3489,8 +3812,11 @@ model itensvendaturno {
   PONTOSPREMIA         Decimal?  @db.Decimal(15, 2)
   IMPOSTOFEDIBPT       Float?
   IMPOSTOESTIBPT       Float?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODVENDA, NUMITEMVENDA])
+  @@unique([CODVENDA, NUMITEMVENDA], map: "RDB$PRIMARY132")
 }
 
 model lancamentos {
@@ -3507,8 +3833,9 @@ model lancamentos {
   NUM_LOTE            Int?
   FORMA_LANCAMENTO_ID Int?
   SOFTWARE            String?              @db.VarChar(1)
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
   forma_de_lancamento forma_de_lancamento? @relation(fields: [FORMA_LANCAMENTO_ID], references: [FORMA_LANCAMENTO_ID], onDelete: Cascade, map: "FK_FORMALANC_ID")
-  lancdetail          lancdetail[]
 
   @@index([FORMA_LANCAMENTO_ID], map: "FK_FORMALANC_ID")
 }
@@ -3528,35 +3855,39 @@ model lancamentosseried {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   NUMNOTA       Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model lancdetail {
   NUMLANC                 Int
   CODCONTA                Int
   NUMLANCDETAIL           Int
-  NUMDOC                  String?     @db.VarChar(10)
+  NUMDOC                  String?  @db.VarChar(10)
   DEBITOCONTA             Float?
   CREDITOCONTA            Float?
   SALDOATUALCONTA         Float
-  LOGINUSUARIO            String      @db.VarChar(20)
-  DATAALTERACAO           DateTime    @db.Date
-  FLGLOG                  String?     @db.VarChar(1)
+  LOGINUSUARIO            String   @db.VarChar(20)
+  DATAALTERACAO           DateTime @db.Date
+  FLGLOG                  String?  @db.VarChar(1)
   CODEMP                  Int?
   CODVENDAREC             Int?
-  SEQUENCIA_HISTORICO     String?     @db.VarChar(60)
-  HISTORICO_VARIAVEL      String?     @db.VarChar(60)
-  SOFTWARE                String?     @db.VarChar(1)
-  SEQUENCIAL_CONTABIL     String?     @db.VarChar(60)
-  SEQUENCIAL_CENTRO_CUSTO String?     @db.VarChar(60)
-  NATUREZA                String?     @db.VarChar(1)
-  VALOR_PARCELA_CONTABIL  Decimal?    @db.Decimal(15, 2)
-  contas                  contas      @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_47")
-  lancamentos             lancamentos @relation(fields: [NUMLANC], references: [NUMLANC], onDelete: NoAction, onUpdate: NoAction, map: "FK_LANCDETAIL_1")
+  SEQUENCIAL_CONTABIL     String?  @db.VarChar(60)
+  SEQUENCIAL_CENTRO_CUSTO String?  @db.VarChar(60)
+  SEQUENCIA_HISTORICO     String?  @db.VarChar(60)
+  HISTORICO_VARIAVEL      String?  @db.VarChar(60)
+  SOFTWARE                String?  @db.VarChar(1)
+  NATUREZA                String?  @db.VarChar(1)
+  VALOR_PARCELA_CONTABIL  Decimal? @db.Decimal(15, 2)
+  CNTINSERT               Int?
+  CNTUPDATE               Int?
+  contas                  contas   @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_47")
 
-  @@id([NUMLANC, NUMLANCDETAIL])
   @@index([CODCONTA], map: "FK_47")
+  @@ignore
 }
 
 model listachpadrao {
@@ -3567,6 +3898,8 @@ model listachpadrao {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model livrocaixa {
@@ -3581,6 +3914,8 @@ model livrocaixa {
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
   DATAALTERACAO  DateTime? @db.Date
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 model lmc {
@@ -3613,18 +3948,20 @@ model lmc {
   DATAALTERACAO     DateTime    @db.Date
   LOGINUSUARIO      String      @db.VarChar(20)
   TOTALRECEBIDODIA  Float?
-  SOBRAFALTA        Float?
-  ACUMULADOMES      Float?
+  SOBRAFALTA        Float?      @db.Float
+  ACUMULADOMES      Float?      @db.Float
   OBS               String?     @db.VarChar(300)
-  SOBRAFALTAT1      Float?
-  SOBRAFALTAT2      Float?
-  SOBRAFALTAT3      Float?
-  SOBRAFALTAT4      Float?
-  SOBRAFALTAT5      Float?
-  SOBRAFALTAT6      Float?
+  SOBRAFALTAT1      Float?      @db.Float
+  SOBRAFALTAT2      Float?      @db.Float
+  SOBRAFALTAT3      Float?      @db.Float
+  SOBRAFALTAT4      Float?      @db.Float
+  SOBRAFALTAT5      Float?      @db.Float
+  SOBRAFALTAT6      Float?      @db.Float
   FLGLOG            String?     @db.VarChar(1)
   CODEMP            Int?
   NUMORDEM          Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   produtos          produtos    @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_48")
   lmcdetail         lmcdetail[]
 
@@ -3643,10 +3980,12 @@ model lmcdetail {
   VENDASBICO        Float?
   CODTANQUE         Int?
   VALORABASTBICO    Float?
-  PRECOBICO         Float?
+  PRECOBICO         Float?   @db.Float
   BICOMANUTENCAO    String?  @db.VarChar(1)
   FLGLOG            String?  @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   bicos             bicos?   @relation(fields: [CODBICO], references: [CODBICO], onDelete: NoAction, onUpdate: NoAction, map: "FK_49")
   lmc               lmc      @relation(fields: [NUMLMC], references: [NUMLMC], onDelete: NoAction, onUpdate: NoAction, map: "FK_50")
 
@@ -3661,6 +4000,8 @@ model locprod {
   DATAALTERACAO DateTime? @db.Date
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model logabast {
@@ -3676,6 +4017,8 @@ model logabast {
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
   DATAALTERACAO   DateTime? @db.Date
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model logbd {
@@ -3685,6 +4028,8 @@ model logbd {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model logversao {
@@ -3695,6 +4040,8 @@ model logversao {
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
   DATAALTERACAO   DateTime? @db.Date
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model manutencaobomba {
@@ -3722,6 +4069,8 @@ model manutencaobomba {
   MEDIDASADOTADA      String?   @db.VarChar(144)
   VOLABAST            Decimal?  @db.Decimal(15, 2)
   LOG                 String?   @db.VarChar(2)
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -3735,6 +4084,8 @@ model mapaatualizacoes {
   FLGLOG              String?  @db.VarChar(1)
   CMD                 String?  @db.VarChar(5000)
   CMD_BLOB            Bytes?   @db.Blob
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@ignore
 }
@@ -3753,6 +4104,8 @@ model matrix {
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -3766,6 +4119,8 @@ model menus {
   CODEMP        Int?
   DATAALTERACAO DateTime?    @db.Date
   FIND_MENU     String?      @db.VarChar(200)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   permissoes    permissoes[]
 }
 
@@ -3779,6 +4134,8 @@ model mobilealerta {
   CODEMP          Int?
   FLGLOG          String?   @db.VarChar(1)
   DATAALTERACAO   DateTime? @db.Date
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model movinv_produtos {
@@ -3792,6 +4149,8 @@ model movinv_produtos {
   FLGINVALTERADO    String?   @db.VarChar(1)
   ESTCALCULADOTEMP  Int?
   DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODPROD, DT_INV])
 }
@@ -3808,20 +4167,24 @@ model movinv_tanques {
   CODPROD           String    @db.VarChar(14)
   FLGINVALTERADO    String?   @db.VarChar(1)
   DATAALTERACAO     DateTime? @db.Date
-  DIFESTOQUE        Float?
   ESTCALCULADOTEMP  Float?
+  DIFESTOQUE        Float?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@ignore
 }
 
 model movnotas {
   DATA          DateTime  @id @db.Date
-  SALDOANTERIOR Float?
-  ENTRADA       Float?
-  SAIDA         Float?
+  SALDOANTERIOR Float?    @db.Float
+  ENTRADA       Float?    @db.Float
+  SAIDA         Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model ncm_tab {
@@ -3829,7 +4192,9 @@ model ncm_tab {
   DESCRICAO     String    @db.VarChar(500)
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
-  CODEMP        Int?
+  CODEMP        Int
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model nfce {
@@ -3857,6 +4222,8 @@ model nfce {
   REGPOST        String?   @db.Char(1)
   CNF            Int?
   XMLEVENTO      String?   @db.VarChar(50)
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 
   @@id([CODVENDA, SEQNFCE])
 }
@@ -3878,6 +4245,8 @@ model nfcecancelado {
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
   LOG                String?   @db.VarChar(2)
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 }
 
 model nfceinutilizado {
@@ -3895,6 +4264,8 @@ model nfceinutilizado {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   XMLEVENTO     String?   @db.VarChar(50)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model nfse {
@@ -3935,7 +4306,8 @@ model nfse {
   DATAEMISSAORPS      DateTime? @db.Date
   CODCANCEL           String?   @db.VarChar(20)
   CODFATURA           Int?
-  FLGLOG              String?   @db.VarChar(1)
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@id([NFSEID, CODEMP])
 }
@@ -3947,6 +4319,8 @@ model niveisusuario {
   DATAALTERACAO   DateTime? @db.Date
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model notafiscalinutilizado {
@@ -3962,6 +4336,8 @@ model notafiscalinutilizado {
   DATAALTERACAO DateTime  @db.Date
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model notafiscalmanual {
@@ -3971,56 +4347,56 @@ model notafiscalmanual {
   DATAEMISSAO         DateTime? @db.Date
   DATASAIDA           DateTime? @db.Date
   HORASAIDA           DateTime? @db.Date
-  BASEICMS            Float?
-  VALORICMS           Float?
-  BASEICMSSUBS        Float?
-  VALORICMSSUBS       Float?
-  VALORTOTALPRODUTOS  Float?
-  VALORFRETE          Float?
-  VALORSEGURO         Float?
-  VALOROUTRASDESPESAS Float?
-  VALORTOTALIPI       Float?
-  VALORTOTALNOTA      Float?
-  VALORDESCONTONOTA   Float?
+  BASEICMS            Float?    @db.Float
+  VALORICMS           Float?    @db.Float
+  BASEICMSSUBS        Float?    @db.Float
+  VALORICMSSUBS       Float?    @db.Float
+  VALORTOTALPRODUTOS  Float?    @db.Float
+  VALORFRETE          Float?    @db.Float
+  VALORSEGURO         Float?    @db.Float
+  VALOROUTRASDESPESAS Float?    @db.Float
+  VALORTOTALIPI       Float?    @db.Float
+  VALORTOTALNOTA      Float?    @db.Float
+  VALORDESCONTONOTA   Float?    @db.Float
   CODTRANSP           Int?
   PLACAVEICULO        String?   @db.VarChar(10)
   UFVEICULO           String?   @db.VarChar(2)
-  QTDVOLUME           Float?
-  ESPECIEVOLUME       String?   @db.VarChar(10)
+  QTDVOLUME           Float?    @db.Float
+  ESPECIEVOLUME       String?   @db.VarChar(100)
   MARCAVOLUME         String?   @db.VarChar(10)
-  NUMEROVOLUME        Float?
-  PESOBRUTOVOLUME     Float?
-  PESOLIQUIDOVOLUME   Float?
+  NUMEROVOLUME        Float?    @db.Float
+  PESOBRUTOVOLUME     Float?    @db.Float
+  PESOLIQUIDOVOLUME   Float?    @db.Float
   OBSNOTAFISCAL       String?   @db.VarChar(5000)
   TIPONF              String?   @db.Char(1)
   NFIMPRESSA          String?   @db.Char(1)
   DATAVENDA1          DateTime? @db.Date
   DATAVENDA2          DateTime? @db.Date
-  DESCONTONOTA        Float?
-  BASEISS             Float?
-  VALORISS            Float?
-  VALORTOTALSERVICOS  Float?
+  DESCONTONOTA        Float?    @db.Float
+  BASEISS             Float?    @db.Float
+  VALORISS            Float?    @db.Float
+  VALORTOTALSERVICOS  Float?    @db.Float
+  RELACAOCUPONSII     String?   @db.VarChar(5000)
   NUMNOTA2            String?   @db.VarChar(9)
   CAMPOICMS           String?   @db.VarChar(500)
-  RELACAOCUPONSII     String?   @db.VarChar(5000)
   SERIENF             String?   @db.VarChar(3)
   MODELONF            String?   @db.VarChar(2)
-  CHNFE               String?   @db.VarChar(50)
   NFEPROTOCOLO        String?   @db.VarChar(20)
   NFETIPO             String?   @db.VarChar(1)
   NROLOTENFE          Int?
-  MODFRETE            String?   @db.VarChar(1)
+  CHNFE               String?   @db.VarChar(50)
   CODOBS              Int?
-  VALORPIS            Float?
-  VALORCOFINS         Float?
-  BASECOFINS          Float?
-  BASEPIS             Float?
+  MODFRETE            String?   @db.VarChar(1)
+  BASEPIS             Float?    @db.Float
+  VALORPIS            Float?    @db.Float
+  BASECOFINS          Float?    @db.Float
+  VALORCOFINS         Float?    @db.Float
   ANTT                String?   @db.VarChar(20)
   TIPOES              String?   @db.VarChar(1)
   CHNFEREF            String?   @db.VarChar(50)
   NATOPERACAO         String?   @db.VarChar(50)
-  CODEMP              Int?
   FLGLOG              String?   @db.VarChar(1)
+  CODEMP              Int?
   FINALIDADE          String?   @db.VarChar(1)
   CODCCE              Int?
   INDPGTO             String?   @db.VarChar(2)
@@ -4030,7 +4406,6 @@ model notafiscalmanual {
   CONSUMIDOR_FINAL    Int?
   OPERACAO            Int?
   ICMS_TOT_NOTA       String?   @db.VarChar(1)
-  DATAALTERACAO       DateTime? @db.Date
   CODUF_NREF          String?   @db.VarChar(4)
   ANO_MES_REF         String?   @db.VarChar(8)
   CNPJ_REF            String?   @db.VarChar(18)
@@ -4038,8 +4413,7 @@ model notafiscalmanual {
   SERIE_NF_REF        String?   @db.VarChar(4)
   NUM_NF_REF          String?   @db.VarChar(9)
   CONTINGENCIA_PAF    String?   @db.VarChar(1)
-  TIPO                String?   @db.Char(1)
-  LOG                 String?   @db.VarChar(2)
+  DATAALTERACAO       DateTime? @db.Date
   LOGINUSUARIO        String?   @db.VarChar(20)
   BASEICMSUFDEST      Decimal?  @db.Decimal(15, 2)
   VALORICMSINTER      Decimal?  @db.Decimal(15, 2)
@@ -4048,10 +4422,14 @@ model notafiscalmanual {
   BASEFCPST           Decimal?  @db.Decimal(15, 2)
   VALORFCPST          Decimal?  @db.Decimal(15, 2)
   CODFATURA           Int?
+  TIPO                String?   @db.Char(1)
+  LOG                 String?   @db.VarChar(2)
   BASEIPI             Decimal?  @db.Decimal(15, 2)
   CNF                 Int?
   HORAEMISSAO         DateTime? @db.Date
   MD5NFE              String?   @db.VarChar(50)
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model notafiscalpista {
@@ -4072,17 +4450,17 @@ model notafiscalpista {
   DATAEMISSAO         DateTime? @db.Date
   DATASAIDA           DateTime? @db.Date
   HORASAIDA           DateTime? @db.Date
-  BASEICMS            Float?
-  VALORICMS           Float?
-  BASEICMSSUBS        Float?
-  VALORICMSSUBS       Float?
-  VALORTOTALPRODUTOS  Float?
-  VALORFRETE          Float?
-  VALORSEGURO         Float?
-  VALOROUTRASDESPESAS Float?
-  VALORTOTALIPI       Float?
-  VALORTOTALNOTA      Float?
-  VALORDESCONTONOTA   Float?
+  BASEICMS            Float?    @db.Float
+  VALORICMS           Float?    @db.Float
+  BASEICMSSUBS        Float?    @db.Float
+  VALORICMSSUBS       Float?    @db.Float
+  VALORTOTALPRODUTOS  Float?    @db.Float
+  VALORFRETE          Float?    @db.Float
+  VALORSEGURO         Float?    @db.Float
+  VALOROUTRASDESPESAS Float?    @db.Float
+  VALORTOTALIPI       Float?    @db.Float
+  VALORTOTALNOTA      Float?    @db.Float
+  VALORDESCONTONOTA   Float?    @db.Float
   RAZAOSOCIALTRANSP   String?   @db.VarChar(30)
   FRETEPORCONTA       String?   @db.VarChar(1)
   PLACATRANSP         String?   @db.VarChar(10)
@@ -4092,22 +4470,24 @@ model notafiscalpista {
   MUNICTRANSP         String?   @db.VarChar(20)
   UFTRANSP            String?   @db.VarChar(2)
   IETRANSP            String?   @db.VarChar(15)
-  QTDVOLUME           Float?
+  QTDVOLUME           Float?    @db.Float
   ESPECIEVOLUME       String?   @db.VarChar(10)
   MARCAVOLUME         String?   @db.VarChar(10)
-  NUMEROVOLUME        Float?
-  PESOBRUTOVOLUME     Float?
-  PESOLIQUIDOVOLUME   Float?
+  NUMEROVOLUME        Float?    @db.Float
+  PESOBRUTOVOLUME     Float?    @db.Float
+  PESOLIQUIDOVOLUME   Float?    @db.Float
   OBSNOTAFISCAL       String?   @db.VarChar(250)
   RELACAOCUPONS       String?   @db.VarChar(300)
-  DESCONTONOTA        Float?
-  BASEISS             Float?
-  VALORISS            Float?
-  VALORTOTALSERVICOS  Float?
+  DESCONTONOTA        Float?    @db.Float
+  BASEISS             Float?    @db.Float
+  VALORISS            Float?    @db.Float
+  VALORTOTALSERVICOS  Float?    @db.Float
   NFIMPRESSA          String?   @db.Char(1)
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int?
   DATAALTERACAO       DateTime? @db.Date
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model notafiscalrelcupons {
@@ -4119,6 +4499,8 @@ model notafiscalrelcupons {
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
   SERIE         String?   @db.VarChar(3)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([NUMNOTA, CODVENDA])
 }
@@ -4131,6 +4513,8 @@ model notafiscalrelcupons_paf {
   FLGLOG                String?               @db.VarChar(1)
   DATAALTERACAO         DateTime?             @db.Date
   CODEMP                Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
   itensnotafiscalmanual itensnotafiscalmanual @relation(fields: [NUMNOTA, SEQITEM], references: [NUMNOTA, SEQITEM], onDelete: NoAction, onUpdate: NoAction, map: "FK_NOTAFISCALRELCUPONS_PAF_2")
 
   @@id([CODABAST, NUMNOTA, NUMABAST, SEQITEM])
@@ -4156,6 +4540,8 @@ model notas {
   DATAALTERACAO      DateTime? @db.Date
   NUM_PEDIDO         Int?
   LOGINUSUARIO       String?   @db.VarChar(20)
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 
   @@index([CODCLIENTE], map: "NOTAS_IDXCOD")
   @@index([CODVENDAREC], map: "NOTAS_IDXREC")
@@ -4167,6 +4553,8 @@ model numseq {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model numseqtemp {
@@ -4175,6 +4563,8 @@ model numseqtemp {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model observacoes {
@@ -4184,6 +4574,8 @@ model observacoes {
   FLGLOG                 String?                  @db.VarChar(1)
   CODEMP                 Int?
   DATAALTERACAO          DateTime?                @db.Date
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
   observacoes_adicionais observacoes_adicionais[]
 }
 
@@ -4194,6 +4586,8 @@ model observacoes_adicionais {
   CODEMP            Int?
   CODOBS            Int
   DATAALTERACAO     DateTime?   @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   observacoes       observacoes @relation(fields: [CODOBS], references: [CODOBS], onDelete: NoAction, onUpdate: NoAction, map: "FK_OBSERVACOES_ADICIONAIS_1")
 
   @@index([CODOBS], map: "FK_OBSERVACOES_ADICIONAIS_1")
@@ -4206,6 +4600,8 @@ model opmenus {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model origem_tribut {
@@ -4214,6 +4610,8 @@ model origem_tribut {
   FLGLOG             String?      @db.VarChar(1)
   DATAALTERACAO      DateTime?    @db.Date
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   ajusteicms         ajusteicms[]
 }
 
@@ -4226,6 +4624,8 @@ model outrasentradas {
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
   CODCAIXA      Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -4242,6 +4642,8 @@ model pag {
   DESCTIPOPAG   String?  @db.Char(20)
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   contas        contas   @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_51")
 
   @@id([CODPAG, NUMPARCELA])
@@ -4264,6 +4666,8 @@ model pagvenda {
   TIPO                 String?   @db.VarChar(1)
   CODCONTAECF          Int?
   DATAALTERACAO        DateTime? @db.Date
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4288,6 +4692,8 @@ model pagvendacartoes {
   IDRESPFISCAL         String?   @db.VarChar(20)
   PARCELASADM          Int?
   CODIGOPOS            Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   pos                  pos?      @relation(fields: [CODIGOPOS], references: [CODIGOPOS], onDelete: NoAction, onUpdate: NoAction, map: "FK_PAGVENDACARTOES_1")
 
   @@id([CODVENDA, NUMPARCELAVENDA])
@@ -4315,6 +4721,8 @@ model pagvendacartoespos {
   CODIGOPOS            Int?
   CODABAST             Int?
   CODCONTA             Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODPOS, NUMPARCELA])
 }
@@ -4339,9 +4747,12 @@ model pagvendacartoesturno {
   IDRESPFISCAL         String?   @db.VarChar(20)
   PARCELASADM          Int?
   CODIGOPOS            Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   pos                  pos?      @relation(fields: [CODIGOPOS], references: [CODIGOPOS], onDelete: NoAction, onUpdate: NoAction, map: "FK_PAGVENDACARTOESTURNO_1")
 
   @@id([CODVENDA, NUMPARCELAVENDA])
+  @@unique([CODVENDA, NUMPARCELAVENDA], map: "RDB$PRIMARY133")
   @@index([CODIGOPOS], map: "FK_PAGVENDACARTOESTURNO_1")
 }
 
@@ -4369,6 +4780,8 @@ model pagvendacheque {
   CODBARRA          String?   @db.VarChar(40)
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4397,8 +4810,11 @@ model pagvendachequeturno {
   CODBARRA          String?   @db.VarChar(40)
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
+  @@unique([CODVENDA, NUMPARCELAVENDA], map: "RDB$PRIMARY134")
 }
 
 model pagvendanotas {
@@ -4414,6 +4830,8 @@ model pagvendanotas {
   TIPONOTA           String?   @db.Char(1)
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4431,8 +4849,11 @@ model pagvendanotasturno {
   TIPONOTA           String?   @db.Char(1)
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
+  @@unique([CODVENDA, NUMPARCELAVENDA], map: "RDB$PRIMARY135")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -4443,6 +4864,8 @@ model pagvendatemp {
   FLGLOG            String?   @db.VarChar(1)
   DATAALTERACAO     DateTime? @db.Date
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@ignore
 }
@@ -4456,6 +4879,8 @@ model pagvendaticket {
   DATAALTERACAO   DateTime @db.Date
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4470,6 +4895,8 @@ model pagvendaticketcliente {
   DATAALTERACAO    DateTime @db.Date
   FLGLOG           String?  @db.VarChar(1)
   CODEMP           Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4484,6 +4911,8 @@ model pagvendaticketclienteturno {
   DATAALTERACAO    DateTime @db.Date
   FLGLOG           String?  @db.VarChar(1)
   CODEMP           Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4497,6 +4926,8 @@ model pagvendaticketturno {
   DATAALTERACAO   DateTime @db.Date
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4517,8 +4948,11 @@ model pagvendaturno {
   TIPO                 String?   @db.VarChar(1)
   CODCONTAECF          Int?
   DATAALTERACAO        DateTime? @db.Date
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
+  @@unique([CODVENDA, NUMPARCELAVENDA], map: "RDB$PRIMARY137")
 }
 
 model pagvendavaucher {
@@ -4532,6 +4966,8 @@ model pagvendavaucher {
   DATAALTERACAO   DateTime @db.Date
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4547,6 +4983,8 @@ model pagvendavaucherturno {
   DATAALTERACAO   DateTime @db.Date
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4562,6 +5000,8 @@ model pagvendavf {
   VALORVF           Float
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -4577,8 +5017,11 @@ model pagvendavfturno {
   VALORVF           Float
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
+  @@unique([CODVENDA, NUMPARCELAVENDA], map: "RDB$PRIMARY139")
 }
 
 model paramshc {
@@ -4588,6 +5031,8 @@ model paramshc {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model pedidocompra {
@@ -4595,12 +5040,14 @@ model pedidocompra {
   CODFORNEC     Int
   CODCOTACAO    Int?
   DATA          DateTime? @db.Date
-  VALOR         Float?
+  VALOR         Float?    @db.Float
   STATUS        String?   @db.VarChar(1)
   OBS           String?   @db.VarChar(100)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model perdasestoque {
@@ -4619,6 +5066,8 @@ model perdasestoque {
   PRECONADATA   Float?
   ESTNADATA     Float?
   CODTANQUE     Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODPERDA, CODPROD])
 }
@@ -4645,6 +5094,8 @@ model perdassobras {
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int
   DATAALTERACAO       DateTime? @db.Date
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@id([NUMDIA, CODEMP])
 }
@@ -4658,6 +5109,8 @@ model periodo_contabil {
   ANO_DO_EXERCICIO                String                @db.VarChar(4)
   PLANO_CONTA_CONTABIL_SEQUENCIAL String?               @db.VarChar(60)
   DATAALTERACAO                   DateTime?             @db.Date
+  CNTINSERT                       Int?
+  CNTUPDATE                       Int?
   plano_conta_contabil            plano_conta_contabil? @relation(fields: [PLANO_CONTA_CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_PERIODO_CONTABIL_1")
 
   @@index([PLANO_CONTA_CONTABIL_SEQUENCIAL], map: "FK_PERIODO_CONTABIL_1")
@@ -4670,6 +5123,8 @@ model permissoes {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   menus         menus     @relation(fields: [CODMENU], references: [CODMENU], onDelete: NoAction, onUpdate: NoAction, map: "FK_52")
 
   @@id([LOGINUSUARIO, CODMENU])
@@ -4694,6 +5149,8 @@ model plano_conta_contabil {
   IDPLANOREF                                                                    Int?
   PLANOREFRFB                                                                   String?                  @db.VarChar(60)
   PLANOREFCONTABIL                                                              String?                  @db.VarChar(60)
+  CNTINSERT                                                                     Int?
+  CNTUPDATE                                                                     Int?
   bancos                                                                        bancos[]
   cad_ciap                                                                      cad_ciap[]
   clientes                                                                      clientes[]
@@ -4707,6 +5164,7 @@ model plano_conta_contabil {
   plano_conta_mapeamento_plano_conta_contabilToplano_conta_mapeamento_RECEITA   plano_conta_mapeamento[] @relation("plano_conta_contabilToplano_conta_mapeamento_RECEITA")
   plano_conta_mapeamento_plano_conta_contabilToplano_conta_mapeamento_RESULTADO plano_conta_mapeamento[] @relation("plano_conta_contabilToplano_conta_mapeamento_RESULTADO")
   produtos                                                                      produtos[]
+  produtosmatconsumo                                                            produtosmatconsumo[]
 }
 
 model plano_conta_mapeamento {
@@ -4721,6 +5179,8 @@ model plano_conta_mapeamento {
   CODEMP                                                                      Int
   FLGLOG                                                                      String?               @db.VarChar(1)
   DATAALTERACAO                                                               DateTime?             @db.Date
+  CNTINSERT                                                                   Int?
+  CNTUPDATE                                                                   Int?
   plano_conta_contabil_plano_conta_contabilToplano_conta_mapeamento_ATIVO     plano_conta_contabil? @relation("plano_conta_contabilToplano_conta_mapeamento_ATIVO", fields: [ATIVO], references: [PLANO_CONTAS_ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PLANO_CONTA_MAPEAMENTO_1")
   plano_conta_contabil_plano_conta_contabilToplano_conta_mapeamento_PASSIVO   plano_conta_contabil? @relation("plano_conta_contabilToplano_conta_mapeamento_PASSIVO", fields: [PASSIVO], references: [PLANO_CONTAS_ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PLANO_CONTA_MAPEAMENTO_2")
   plano_conta_contabil_plano_conta_contabilToplano_conta_mapeamento_CMV       plano_conta_contabil? @relation("plano_conta_contabilToplano_conta_mapeamento_CMV", fields: [CMV], references: [PLANO_CONTAS_ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PLANO_CONTA_MAPEAMENTO_3")
@@ -4751,6 +5211,8 @@ model plano_conta_padrao {
   NATUREZA            String    @default("C") @db.VarChar(1)
   DATAALTERACAO       DateTime? @db.Date
   IDPLANOREF          Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model plano_referencia {
@@ -4760,6 +5222,8 @@ model plano_referencia {
   CODEMP        Int
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([IDRF, CODEMP])
 }
@@ -4772,6 +5236,8 @@ model portadores {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model pos {
@@ -4786,6 +5252,8 @@ model pos {
   FLGLOG               String?                @db.VarChar(1)
   CODEMP               Int?
   DESATIVADO           String?                @db.VarChar(1)
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   pagvendacartoes      pagvendacartoes[]
   pagvendacartoesturno pagvendacartoesturno[]
 }
@@ -4847,6 +5315,9 @@ model posto {
   CONTABILIDADE_CNPJ    String?   @db.VarChar(18)
   MENSAGEMCUPOMI        String?   @db.VarChar(40)
   MENSAGEMCUPOMII       String?   @db.VarChar(40)
+  RNTRC_TRANSPORTADOR   String?   @db.VarChar(9)
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
   ufs                   ufs?      @relation(fields: [SIGLAUF], references: [SIGLAUF], onDelete: NoAction, onUpdate: NoAction, map: "FK_53")
   cidades               cidades?  @relation(fields: [CODCIDADE], references: [CODCIDADE], onDelete: NoAction, onUpdate: NoAction, map: "FK_84")
 
@@ -4861,13 +5332,15 @@ model precobicocaixa {
   CODTANQUE       Int?
   PRECOVENDAVISTA Float?
   PRECOVENDAPRAZO Float?
-  PRECOCOMPRA     Float?
-  PRECOCUSTO      Float?
+  PRECOCOMPRA     Float?    @db.Float
+  PRECOCUSTO      Float?    @db.Float
   DATAALTERACAO   DateTime? @db.Date
   LOGINUSUARIO    String?   @db.VarChar(20)
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
   TIPOPAG         String?   @db.VarChar(1)
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODCAIXA, CODBICO])
 }
@@ -4883,6 +5356,8 @@ model precocombustiveis {
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int
   CODTERMINAL     Int
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 
   @@id([CODPROD, CODEMP, CODTERMINAL])
 }
@@ -4890,17 +5365,19 @@ model precocombustiveis {
 model precocustovenda {
   CODPRECOCV        Int       @id
   CODPROD           String?   @db.VarChar(14)
-  PRECOVENDAANTIGO  Float?
-  PRECOCOMPRAANTIGO Float?
-  PRECOVENDA        Float?
-  PRECOCOMPRA       Float?
+  PRECOVENDAANTIGO  Float?    @db.Float
+  PRECOCOMPRAANTIGO Float?    @db.Float
+  PRECOVENDA        Float?    @db.Float
+  PRECOCOMPRA       Float?    @db.Float
   DATAMODIFICACAO   DateTime? @db.Date
   DATAALTERACAO     DateTime? @db.Date
   LOGINUSUARIO      String?   @db.VarChar(20)
-  PRECOCUSTOANTIGO  Float?
-  PRECOCUSTO        Float?
+  PRECOCUSTOANTIGO  Float?    @db.Float
+  PRECOCUSTO        Float?    @db.Float
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model precoitemcliente {
@@ -4911,6 +5388,8 @@ model precoitemcliente {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODCLIENTE, CODPROD])
 }
@@ -4930,6 +5409,8 @@ model prodcaixaterminal {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   produtos      produtos @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_PRODCAIXATERMINAL_1")
   caixas        caixas   @relation(fields: [CODCAIXA], references: [CODCAIXA], onDelete: NoAction, onUpdate: NoAction, map: "prodcaixaterminal_ibfk_2")
 
@@ -4953,6 +5434,8 @@ model prodturno {
   TOTALACRESCPROD  Float?
   FLGLOG           String?  @db.VarChar(1)
   CODEMP           Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 
   @@id([CODTURNO, CODPROD])
 }
@@ -4973,6 +5456,8 @@ model prodturnoturno {
   TOTALACRESCPROD  Float?
   FLGLOG           String?  @db.VarChar(1)
   CODEMP           Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 
   @@id([CODTURNO, CODPROD])
 }
@@ -5013,12 +5498,12 @@ model produtos {
   CODGRUPOLVC          String?               @db.VarChar(20)
   CODPRODLVC           String?               @db.VarChar(20)
   LOCPROD              String?               @db.VarChar(10)
-  DENSPROD             Float?
+  DENSPROD             Float?                @db.Float
   FLGBRINDE            String?               @db.Char(1)
   QUANTPONTOS          Int?
-  QUANTPONTOSF         Float?
+  QUANTPONTOSF         Float?                @db.Float
   CST                  String?               @db.VarChar(5)
-  PRECOCUSTO           Float?
+  PRECOCUSTO           Float?                @db.Float
   CODNCM               String?               @db.VarChar(10)
   CODANP               String?               @db.VarChar(14)
   IPPT                 String?               @db.VarChar(1)
@@ -5051,13 +5536,16 @@ model produtos {
   CODPLANOCONTAS       Int?
   CODPLANOCMV          Int?
   CODPLANOVENDAS       Int?
-  VALORVENDAPORST      Float?
-  VALORVENDAICMSOP     Float?
+  VALORVENDAPORST      Float?                @db.Float
+  VALORVENDAICMSOP     Float?                @db.Float
   PONTOSPREMIA         Decimal?              @db.Decimal(15, 2)
   RESGATEPREMIA        Decimal?              @db.Decimal(15, 2)
   TABELASERVICO_ID     String?               @db.VarChar(14)
   TABELAATIVIDADE_ID   Int?
   ESTMAXIMOPROD        Int?
+  CODALIQISS           Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   aliquotas            aliquotas             @relation(fields: [CODALIQ], references: [CODALIQ], onDelete: NoAction, onUpdate: NoAction, map: "FK_54")
   gruposprod           gruposprod            @relation(fields: [CODGRUPO], references: [CODGRUPO], onDelete: NoAction, onUpdate: NoAction, map: "FK_55")
   unidades             unidades?             @relation(fields: [SIGLAUNIDADE], references: [SIGLAUNIDADE], onDelete: NoAction, map: "FK_56")
@@ -5094,11 +5582,13 @@ model produtosanp {
   DATAALTERACAO   DateTime? @db.Date
   CODEMP          Int?
   DT_FIM_VALIDADE String?   @db.VarChar(7)
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model produtosmatconsumo {
   CODGRUPO               Int
-  CODBARRA               String?                 @db.VarChar(13)
+  CODBARRA               String?                 @db.VarChar(14)
   SIGLAUNIDADE           String?                 @db.VarChar(3)
   SITTRIBPROD            String?                 @db.VarChar(2)
   CODALIQ                Int
@@ -5139,9 +5629,13 @@ model produtosmatconsumo {
   CODPLANOCMV            Int?
   RESGATEPREMIA          Decimal?                @db.Decimal(15, 2)
   CODINCMONOFASICA       String?                 @db.VarChar(3)
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
   tipo_ativo_imobilizado tipo_ativo_imobilizado? @relation(fields: [TIPO_ID], references: [TIPO_ID], onDelete: NoAction, onUpdate: NoAction, map: "FK_PRODUTOSMATCONSUMO_1")
+  plano_conta_contabil   plano_conta_contabil?   @relation(fields: [CONTABIL_SEQUENCIAL], references: [SEQUENCIAL], onDelete: NoAction, onUpdate: NoAction, map: "FK_PRODUTOSMATCONSUMO_CONTABIL")
 
   @@index([TIPO_ID], map: "FK_PRODUTOSMATCONSUMO_1")
+  @@index([CONTABIL_SEQUENCIAL], map: "FK_PRODUTOSMATCONSUMO_CONTABIL")
 }
 
 model rec {
@@ -5157,6 +5651,8 @@ model rec {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   CODVENDA      Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   contas        contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_57")
 
   @@id([CODREC, NUMPARCELA])
@@ -5178,6 +5674,8 @@ model recup {
   CODTANQUE     Int?
   CODBOMBA      Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -5189,6 +5687,8 @@ model recupaltversaoecf {
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -5210,6 +5710,8 @@ model recupdocnaofiscais {
   TIPODOC         String?   @db.VarChar(2)
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model recupgamreg60m {
@@ -5219,41 +5721,41 @@ model recupgamreg60m {
   NUMEROUDOC        String    @db.VarChar(10)
   CONTRO            String    @db.VarChar(3)
   CONTREDZ          String    @db.VarChar(10)
-  VALORVENDABRUTA   Float
+  VALORVENDABRUTA   Decimal   @db.Decimal(15, 2)
   VALORTOTGERAL     Decimal?  @db.Decimal(15, 2)
-  ST1               Float?
-  ST2               Float?
-  ST3               Float?
-  ST4               Float?
-  ST5               Float?
-  ST6               Float?
-  VALORST1          Float?
-  VALORST2          Float?
-  VALORST3          Float?
-  VALORST4          Float?
-  VALORST5          Float?
-  VALORST6          Float?
-  SUBSTRIB          Float?
-  ISENTO            Float?
-  NINCID            Float?
-  CANCEL            Float?
-  DESCONTOS         Float?
-  ISSQN             Float?
+  ST1               Float?    @db.Float
+  ST2               Float?    @db.Float
+  ST3               Float?    @db.Float
+  ST4               Float?    @db.Float
+  ST5               Float?    @db.Float
+  ST6               Float?    @db.Float
+  VALORST1          Float?    @db.Float
+  VALORST2          Float?    @db.Float
+  VALORST3          Float?    @db.Float
+  VALORST4          Float?    @db.Float
+  VALORST5          Float?    @db.Float
+  VALORST6          Float?    @db.Float
+  SUBSTRIB          Float?    @db.Float
+  ISENTO            Float?    @db.Float
+  NINCID            Float?    @db.Float
+  CANCEL            Float?    @db.Float
+  DESCONTOS         Float?    @db.Float
+  ISSQN             Float?    @db.Float
   VERSAOSB          String?   @db.VarChar(10)
   DATAHORAINSTALSB  DateTime? @db.Date
   DATAHORAEMISSAORZ DateTime? @db.Date
   MFADICIONAL       String?   @db.VarChar(1)
   NUMUSUARIO        String?   @db.VarChar(2)
   PARAMECFISSQN     String?   @db.VarChar(1)
-  ALIQISSQN1        Float?
-  ALIQISSQN2        Float?
-  ALIQISSQN3        Float?
-  ISSQN2            Float?
-  ISSQN3            Float?
+  ALIQISSQN1        Float?    @db.Float
+  ALIQISSQN2        Float?    @db.Float
+  ALIQISSQN3        Float?    @db.Float
+  ISSQN2            Float?    @db.Float
+  ISSQN3            Float?    @db.Float
   LOG               String?   @db.VarChar(2)
   DATAMOVIMENTO     DateTime? @db.Date
   NFABECF           String?   @db.VarChar(20)
-  ACRESCIMOS        Float?
+  ACRESCIMOS        Float?    @db.Float
   SUBSISSQN         Float?
   ISENTOISSQN       Float?
   NIISSQN           Float?
@@ -5263,6 +5765,8 @@ model recupgamreg60m {
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
   DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([DATADADOS, CODECF, CONTREDZ])
 }
@@ -5282,9 +5786,9 @@ model recupitensvenda {
   CODLOCPROD           Int?
   PRECOCOMDESCONTO     Float?
   TIPOPAG              String?   @db.VarChar(1)
-  PRECOCUSTO           Float?
+  PRECOCUSTO           Float?    @db.Float
   CODALIQ              Int?
-  PERCDESCONTO         Float?
+  PERCDESCONTO         Float?    @db.Float
   TOTALITEMVENDA       Decimal?  @db.Decimal(15, 2)
   TOTALDESCITEMVENDA   Decimal?  @db.Decimal(15, 2)
   TIPO                 String?   @db.VarChar(1)
@@ -5311,6 +5815,8 @@ model recupitensvenda {
   TOTALDESCVENDA       Decimal?  @db.Decimal(15, 2)
   TOTALACRESCVENDA     Decimal?  @db.Decimal(15, 2)
   PRECOBOMBA           Float?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODVENDA, NUMITEMVENDA])
 }
@@ -5337,6 +5843,8 @@ model recupnfce {
   SEQNFCE        Int?
   TIPO           String?   @db.Char(1)
   CORRECAOTAG    String?   @db.VarChar(1)
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 model recuppagvenda {
@@ -5354,6 +5862,8 @@ model recuppagvenda {
   LOG                  String?   @db.VarChar(2)
   TIPO                 String?   @db.VarChar(1)
   DATAALTERACAO        DateTime? @db.Date
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@id([CODVENDA, NUMPARCELAVENDA])
 }
@@ -5371,6 +5881,8 @@ model recuppagvendacartoes {
   PRAZOCARTAO          Int?
   FLGLOG               String?  @db.VarChar(1)
   CODEMP               Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 
   @@ignore
 }
@@ -5389,6 +5901,8 @@ model recuppagvendanotas {
   TIPONOTA           String?   @db.Char(1)
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 
   @@ignore
 }
@@ -5417,6 +5931,8 @@ model recupvendas {
   GERREM          String?   @db.VarChar(1)
   CODCAIXA        Int?
   SUBTOTALDESC    Decimal?  @db.Decimal(15, 2)
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model refcliente {
@@ -5429,9 +5945,8 @@ model refcliente {
   DATAALTERACAO DateTime @db.Date
   FLGLOG        String?  @db.VarChar(1)
   CODEMP        Int?
-  clientes      clientes @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_58")
-
-  @@index([CODCLIENTE], map: "FK_58")
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model reflexo_apuracao_icms {
@@ -5440,24 +5955,28 @@ model reflexo_apuracao_icms {
   FLGLOG                     String?      @db.VarChar(1)
   DATAALTERACAO              DateTime?    @db.Date
   CODEMP                     Int?
+  CNTINSERT                  Int?
+  CNTUPDATE                  Int?
   ajusteicms                 ajusteicms[]
 }
 
 model regmovestoque {
-  CODMOV        Float     @id
+  CODMOV        Float     @id @db.Float
   CODPROD       String?   @db.VarChar(14)
-  ENTRADA       Float?
-  SAIDA         Float?
-  SALDOATUAL    Float?
-  SALDOANTERIOR Float?
+  ENTRADA       Float?    @db.Float
+  SAIDA         Float?    @db.Float
+  SALDOATUAL    Float?    @db.Float
+  SALDOANTERIOR Float?    @db.Float
   NUMDOC        String?   @db.VarChar(10)
   HISTORICO     String?   @db.VarChar(60)
   DATAMOV       DateTime? @db.Date
-  CUSTO         Float?
+  CUSTO         Float?    @db.Float
   SERIE         String?   @db.VarChar(5)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -5477,6 +5996,8 @@ model regua {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -5494,6 +6015,8 @@ model reposicao {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -5606,9 +6129,6 @@ model requisitoerpafecf {
   VII_20        String?   @db.VarChar(2)
   VII_21        String?   @db.VarChar(2)
   VII_22        String?   @db.VarChar(2)
-  FLGLOG        String?   @db.VarChar(1)
-  DATAALTERACAO DateTime? @db.Date
-  CODEMP        Int?
   XII_2         String?   @db.VarChar(2)
   XII_3         String?   @db.VarChar(2)
   XII_4         String?   @db.VarChar(2)
@@ -5631,6 +6151,11 @@ model requisitoerpafecf {
   LVIII_2       String?   @db.VarChar(2)
   LVIII_3       String?   @db.VarChar(2)
   LVIII_4       String?   @db.VarChar(2)
+  FLGLOG        String?   @db.VarChar(1)
+  DATAALTERACAO DateTime? @db.Date
+  CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model resgatepremia {
@@ -5641,6 +6166,8 @@ model resgatepremia {
   CODEMP        Int?
   DATARESGATE   DateTime? @db.Date
   CODFUNC       Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model resgatepremiaitem {
@@ -5652,6 +6179,8 @@ model resgatepremiaitem {
   CODPROD       String?   @db.VarChar(14)
   PONTOSPREMIA  Decimal?  @db.Decimal(15, 2)
   QUANTIDADE    Decimal?  @db.Decimal(15, 2)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODRESGATE, SEQITEM])
 }
@@ -5662,6 +6191,8 @@ model responsabilidade_icms {
   FLGLOG                String?      @db.VarChar(1)
   DATAALTERACAO         DateTime?    @db.Date
   CODEMP                Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
   ajusteicms            ajusteicms[]
 }
 
@@ -5689,25 +6220,28 @@ model resumocaixa {
   SALDOCAIXA           Float?
   ACUMVENDASPRAZOANT   Float?
   ACUMCHEPREDATADOSANT Float?
-  JUROSRECEBIDOS       Float?
-  DESCONTOSCONCEDIDOS  Float?
+  JUROSRECEBIDOS       Float?    @db.Float
+  DESCONTOSCONCEDIDOS  Float?    @db.Float
   FLGLOG               String?   @db.VarChar(1)
   CODEMP               Int?
   DATAALTERACAO        DateTime? @db.Date
   CHDEVOLVIDO          Decimal?  @db.Decimal(15, 2)
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 }
 
 model resumocaixaccorrente {
-  DATACAIXA       DateTime  @db.Date
-  CODCONTA        Int
-  VALORDEPOSITOCH Decimal?  @db.Decimal(15, 2)
-  VALORDEPOSITODH Decimal?  @db.Decimal(15, 2)
-  VALORSAQUE      Decimal?  @db.Decimal(15, 2)
-  FLGLOG          String?   @db.VarChar(10)
-  CODEMP          Int?
-  LOGINUSUARIO    String?   @db.VarChar(20)
-  DATAALTERACAO   DateTime? @db.Date
-  CHDEVOLVIDO     Decimal?  @db.Decimal(15, 2)
+  DATACAIXA     DateTime  @db.Date
+  CODCONTA      Int
+  VALORDEPOSITO Decimal?  @db.Decimal(15, 2)
+  VALORSAQUE    Decimal?  @db.Decimal(15, 2)
+  FLGLOG        String?   @db.VarChar(10)
+  CODEMP        Int?
+  LOGINUSUARIO  String?   @db.VarChar(20)
+  DATAALTERACAO DateTime? @db.Date
+  CHDEVOLVIDO   Decimal?  @db.Decimal(15, 2)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([DATACAIXA, CODCONTA])
 }
@@ -5723,6 +6257,8 @@ model rlucro {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -5733,12 +6269,14 @@ model rnotae {
   NUMITEMVENDA  Int?
   CODBICO       Int?
   CODABAST      Int?
-  ENCINICIAL    Float?
-  ENCFINAL      Float?
+  ENCINICIAL    Float?    @db.Float
+  ENCFINAL      Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   HORAABAST     DateTime? @db.Date
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model rnotas {
@@ -5750,6 +6288,8 @@ model rnotas {
   FLGLOG           String?   @db.VarChar(1)
   CODEMP           Int?
   DATAALTERACAO    DateTime? @db.Date
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 model rnotasanalitico {
@@ -5757,12 +6297,14 @@ model rnotasanalitico {
   CODCLIENTE         Int
   DATAVENCIMENTONOTA DateTime? @db.Date
   DATAEMISSAONOTA    DateTime? @db.Date
-  VALORNOTA          Float?
+  VALORNOTA          Float?    @db.Float
   NOMECLIENTE        String?   @db.VarChar(40)
   DIAFECHAMENTO      Int?
   FLGLOG             String?   @db.VarChar(1)
   CODEMP             Int?
   DATAALTERACAO      DateTime? @db.Date
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -5775,6 +6317,8 @@ model rnotasx {
   FLGLOG           String?   @db.VarChar(1)
   CODEMP           Int?
   DATAALTERACAO    DateTime? @db.Date
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 
   @@ignore
 }
@@ -5793,6 +6337,8 @@ model rnotay {
   CODEMP        Int?
   CODAUXS       String?   @db.VarChar(20)
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model sangriacaixa {
@@ -5805,6 +6351,8 @@ model sangriacaixa {
   DATAALTERACAO        DateTime @db.Date
   FLGLOG               String?  @db.VarChar(1)
   CODEMP               Int?
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
   contas               contas   @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_59")
   turnos               turnos   @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_60")
 
@@ -5821,6 +6369,8 @@ model sangriachtroco {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   contas        contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_61")
   turnos        turnos?   @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_62")
 
@@ -5833,17 +6383,19 @@ model sangriaimp {
   DSCSANGRIA    String?   @db.VarChar(20)
   CODCONTA      Int
   CODTURNO      Int
-  VALORSANGRIA  Float?
+  VALORSANGRIA  Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model sangriavalor {
   CODSANGRIA    Int       @id
   DSCSANGRIA    String    @db.VarChar(20)
   CODCONTA      Int
-  VALORSANGRIA  Float
+  VALORSANGRIA  Float     @db.Float
   CODTURNO      Int
   CODFUNC       Int
   CODDESTINO    Int?
@@ -5855,6 +6407,8 @@ model sangriavalor {
   CODVENDA      Int?
   CODFRENTISTA  Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model situacaocheque {
@@ -5863,6 +6417,8 @@ model situacaocheque {
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
   DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model situacaopag {
@@ -5872,13 +6428,15 @@ model situacaopag {
   DATAALTERACAO  DateTime? @db.Date
   FLGLOG         String?   @db.VarChar(1)
   CODEMP         Int?
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
 }
 
 model suprimento {
   CODSUPRIMENTO   Int       @id
   DSCSUPRIMENTO   String    @db.VarChar(20)
   CODCONTA        Int
-  VALORSUPRIMENTO Float
+  VALORSUPRIMENTO Float     @db.Float
   CODTURNO        Int
   CODFUNC         Int
   DATAEMISSAO     DateTime? @db.Date
@@ -5888,6 +6446,8 @@ model suprimento {
   CODCAIXA        Int?
   CODVENDA        Int?
   DATAALTERACAO   DateTime? @db.Date
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model tabela5_3minas {
@@ -5898,23 +6458,23 @@ model tabela5_3minas {
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tabelaatividade {
-  TABELAATIVIDADE_ID Int       @id
-  TABELASERVICO_ID   String?   @db.VarChar(14)
-  DESCRICAO          String?   @db.VarChar(300)
-  CODEMP             Int
-  FLGLOG             String?   @db.VarChar(1)
-  DATAALTERACAO      DateTime? @db.Date
+  TABELAATIVIDADE_ID Int     @id
+  TABELASERVICO_ID   String? @db.VarChar(14)
+  DESCRICAO          String? @db.VarChar(300)
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 }
 
 model tabelaservico {
-  TABELASERVICO_ID String    @id @db.VarChar(14)
-  DESCRICAO        String?   @db.VarChar(300)
-  CODEMP           Int
-  FLGLOG           String?   @db.VarChar(1)
-  DATAALTERACAO    DateTime? @db.Date
+  TABELASERVICO_ID String  @id @db.VarChar(14)
+  DESCRICAO        String? @db.VarChar(300)
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
@@ -5924,6 +6484,8 @@ model tabelasexpgerencial {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -5940,10 +6502,12 @@ model tanques {
   LOG              String?       @db.VarChar(2)
   FLGLOG           String?       @db.VarChar(1)
   CODEMP           Int?
-  MINIMO           Float?
+  MINIMO           Float?        @db.Float
   STATUS           String?       @db.VarChar(1)
   DESATIVADO       String?       @db.VarChar(1)
   TIPOCOMBUS       Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
   produtos         produtos      @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_63")
   bicos            bicos[]
   esttqfisico      esttqfisico[]
@@ -5962,6 +6526,8 @@ model tanqueslmc {
   CODPROD             String?   @db.VarChar(14)
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
   produtos            produtos? @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_64")
   turnos              turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_65")
   tanques             tanques   @relation(fields: [CODTANQUE], references: [CODTANQUE], onDelete: NoAction, onUpdate: NoAction, map: "FK_66")
@@ -5974,10 +6540,12 @@ model tanqueslmc {
 model tanquesz {
   DATAZ         DateTime  @db.Date
   CODTANQUE     Int
-  VOLUMETANQUE  Float?
+  VOLUMETANQUE  Float?    @db.Float
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([DATAZ, CODTANQUE])
 }
@@ -5986,13 +6554,15 @@ model tanquesz {
 model tbtemp_invencombus {
   CODPROD       String    @db.VarChar(14)
   CODTANQUE     Int?
-  VOLUMETANQUE  Float?
+  VOLUMETANQUE  Float?    @db.Float
   DATAULTCUSTO  DateTime? @db.Date
   VL_CUSTO_UNIT Float?
   VL_TOTAL      Decimal?  @db.Decimal(15, 2)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -6007,8 +6577,10 @@ model tbtemp_inventario {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int
   DATAALTERACAO DateTime? @db.Date
-  MVAMEDIO      Float?
-  ICMSMEDIO     Float?
+  MVAMEDIO      Float?    @db.Float
+  ICMSMEDIO     Float?    @db.Float
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([CODPROD, DATA, CODEMP])
 }
@@ -6020,7 +6592,9 @@ model tbtemp_relestcontabil {
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
-  PRECOCUSTO    Float?
+  PRECOCUSTO    Float?    @db.Float
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@ignore
 }
@@ -6031,6 +6605,8 @@ model terminaismoveis {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 
   @@id([IMEI, CODEMP])
 }
@@ -6047,6 +6623,8 @@ model tickets {
   DATAREC         DateTime? @db.Date
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
   contas          contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_67")
   empticket       empticket @relation(fields: [CODEMPTICKET], references: [CODEMPTICKET], onDelete: NoAction, onUpdate: NoAction, map: "FK_68")
 
@@ -6060,7 +6638,6 @@ model ticketvalecliente {
   CODCLIENTE               Int
   NUMDOC                   String    @db.VarChar(10)
   COO                      Int?
-  CODCONTA                 Int
   VALOR                    Float?
   DATATICKET               DateTime? @db.Date
   HORATICKET               DateTime? @db.Date
@@ -6078,6 +6655,8 @@ model ticketvalecliente {
   LOG                      String?   @db.VarChar(2)
   CODVENDAREC              Int?
   CODFUNC                  Int?
+  CNTINSERT                Int?
+  CNTUPDATE                Int?
 
   @@id([CODTICKETVALE, NUMPARCELA])
 }
@@ -6089,7 +6668,8 @@ model ticketvaleclientepag {
   LOGINUSUARIO  String?   @db.VarChar(20)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
-  FLGLOG        String?   @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model ticketvaledetail {
@@ -6103,6 +6683,8 @@ model ticketvaledetail {
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
   CODDETALCONTA   Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
   tipodes         tipodes?  @relation(fields: [CODTIPODES], references: [CODTIPODES], onDelete: NoAction, onUpdate: NoAction, map: "FK_69")
   contas          contas    @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_70")
 
@@ -6115,6 +6697,8 @@ model tipo_apuracao {
   FLGLOG             String?      @db.VarChar(1)
   DATAALTERACAO      DateTime?    @db.Date
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   ajusteicms         ajusteicms[]
 }
 
@@ -6124,6 +6708,8 @@ model tipo_ativo_imobilizado {
   FLGLOG             String?              @db.VarChar(1)
   DATAALTERACAO      DateTime?            @db.Date
   CODEMP             Int?
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
   produtosmatconsumo produtosmatconsumo[]
 }
 
@@ -6134,6 +6720,8 @@ model tipo_mov_ciap {
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tipoalerta {
@@ -6142,6 +6730,8 @@ model tipoalerta {
   CODEMP        Int?
   FLGLOG        String?   @db.VarChar(1)
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tipoboleta {
@@ -6153,11 +6743,13 @@ model tipoboleta {
   LARGURAPAPEL         Float?
   INSTRUCOESTIPOBOLETA String?   @db.VarChar(255)
   TIPO                 String?   @db.Char(1)
-  JUROS                Float?
+  JUROS                Float?    @db.Float
   DIASDESC             Int?
   FLGLOG               String?   @db.VarChar(1)
   CODEMP               Int?
   DATAALTERACAO        DateTime? @db.Date
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 }
 
 model tipoconta {
@@ -6168,6 +6760,8 @@ model tipoconta {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   IMP_VINCULADO String?   @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tipodes {
@@ -6178,6 +6772,8 @@ model tipodes {
   REFIMCS          String?            @db.VarChar(1)
   FLGLOG           String?            @db.VarChar(1)
   CODEMP           Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
   admcartao        admcartao[]
   despesas         despesas[]
   difdespesas      difdespesas[]
@@ -6197,6 +6793,8 @@ model tipodetalcontas {
   DESPFIXA      String?   @db.VarChar(1)
   DESPINTERNA   String?   @db.VarChar(1)
   DESPCAIXA     String?   @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tipofechamento {
@@ -6207,6 +6805,8 @@ model tipofechamento {
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
   DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([NUMTIPOVENCIMENTO, NUMTIPOFECHAMENTO])
 }
@@ -6217,6 +6817,8 @@ model tipoimp {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tipolanc {
@@ -6225,6 +6827,8 @@ model tipolanc {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model tipotanque {
@@ -6237,6 +6841,8 @@ model tipotanque {
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
   DATAALTERACAO   DateTime? @db.Date
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model tipovencimento {
@@ -6245,6 +6851,8 @@ model tipovencimento {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model totaisbicocaixa {
@@ -6264,18 +6872,17 @@ model totaisbicocaixa {
   CODEMP              Int?
   FLGALT              String?  @db.VarChar(1)
   AJUSTEENC           Float?
-  NUMATEND            Int?
   VOLCALC             Float?
   DIFVOL              Float?
   VALORABAST          Float?
   TOTALABASTCOMDIFVOL Float?
+  NUMATEND            Int?
   CODPROD             String?  @db.VarChar(14)
   CODTANQUE           Int?
-  caixas              caixas   @relation(fields: [CODCAIXA], references: [CODCAIXA], onDelete: NoAction, onUpdate: NoAction, map: "totaisbicocaixa_ibfk_1")
-  bicos               bicos    @relation(fields: [CODBICO], references: [CODBICO], onDelete: NoAction, onUpdate: NoAction, map: "totaisbicocaixa_ibfk_2")
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 
   @@id([CODCAIXA, CODBICO])
-  @@index([CODBICO], map: "CODBICO")
 }
 
 model totaisbicoturno {
@@ -6295,6 +6902,8 @@ model totaisbicoturno {
   FLGLOG                 String?   @db.VarChar(1)
   CODEMP                 Int?
   DATAALTERACAO          DateTime? @db.Date
+  CNTINSERT              Int?
+  CNTUPDATE              Int?
   turnos                 turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_71")
   bicos                  bicos     @relation(fields: [CODBICO], references: [CODBICO], onDelete: NoAction, onUpdate: NoAction, map: "FK_72")
 
@@ -6315,6 +6924,8 @@ model totalizadores {
   FLGLOG        String?     @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime?   @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   produtos      produtos?   @relation(fields: [CODPROD], references: [CODPROD], onDelete: NoAction, onUpdate: NoAction, map: "FK_73")
   gruposprod    gruposprod? @relation(fields: [CODGRUPO], references: [CODGRUPO], onDelete: NoAction, onUpdate: NoAction, map: "FK_74")
 
@@ -6335,6 +6946,8 @@ model totalizaremoto {
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model transmissaowpp {
@@ -6345,6 +6958,8 @@ model transmissaowpp {
   ARQ_DIVERSOS      Bytes? @db.TinyBlob
   NOMEARQ           String @db.VarChar(50)
   TEXTO_MENSAGEM    Bytes? @db.Blob
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
 model transp {
@@ -6359,12 +6974,14 @@ model transp {
   TELTRANSP     String?   @db.VarChar(14)
   FAXTRANSP     String?   @db.VarChar(14)
   IETRANSP      String?   @db.VarChar(16)
+  CODPAIS       String?   @db.VarChar(5)
   NUMERO        String?   @db.VarChar(10)
   COMPLEMENTO   String?   @db.VarChar(10)
-  CODPAIS       String?   @db.VarChar(5)
   FLGLOG        String?   @db.VarChar(1)
   CODEMP        Int?
   DATAALTERACAO DateTime? @db.Date
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model trocacheque {
@@ -6378,17 +6995,61 @@ model trocacheque {
   NOMETITULARCHEQUE String?   @db.VarChar(40)
   TELCHEQUE         String?   @db.VarChar(20)
   OBSCHEQUE         String?   @db.VarChar(40)
-  VALORDINHEIRO     Float?
-  VALORCHEQUETROCO  Float?
+  VALORDINHEIRO     Float?    @db.Float
+  VALORCHEQUETROCO  Float?    @db.Float
   NUMAGENCIA        String?   @db.VarChar(10)
-  VALORCHEQUE       Float?
+  VALORCHEQUE       Float?    @db.Float
   CPFCHEQUE         String?   @db.VarChar(18)
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
   CODFUNC           Int?
   DATAALTERACAO     DateTime? @db.Date
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
 
+model trococheque {
+  CODTROCOCHEQUE   Int                @id
+  DATAENTRADA      DateTime?          @db.Date
+  DATABAIXA        DateTime?          @db.Date
+  EMITENTECHEQUE   String?            @db.VarChar(40)
+  TITULARCHEQUE    String?            @db.VarChar(40)
+  BOMPARA          DateTime?          @db.Date
+  VALORCHEQUE      Float?             @db.Float
+  SITUACAOCHEQUE   String?            @db.Char(1)
+  CODTURNO         Int?
+  AUTORIZADOA      String?            @db.VarChar(40)
+  VALORBAIXA       Float?             @db.Float
+  FLGLOG           String?            @db.VarChar(1)
+  DATAALTERACAO    DateTime?          @db.Date
+  CODEMP           Int?
+  CODCAIXA         Int?
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
+  turnos           turnos?            @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "trococheque_ibfk_1")
+  trocochequeturno trocochequeturno[]
+
+  @@index([CODTURNO], map: "CODTURNO")
+}
+
+model trocochequeturno {
+  NUMSEQ         Int         @id
+  CODTROCOCHEQUE Int
+  CODTURNO       Int
+  VALOR          Float       @db.Float
+  SITUACAO       String?     @db.Char(1)
+  FLGLOG         String?     @db.VarChar(1)
+  DATAALTERACAO  DateTime?   @db.Date
+  CODEMP         Int?
+  CODCAIXA       Int?
+  CNTINSERT      Int?
+  CNTUPDATE      Int?
+  trococheque    trococheque @relation(fields: [CODTROCOCHEQUE], references: [CODTROCOCHEQUE], onDelete: NoAction, onUpdate: NoAction, map: "FK_TROCOCHEQUE_1")
+
+  @@index([CODTROCOCHEQUE], map: "CODTROCOCHEQUE")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model trocoturno {
   CODTURNO          Int
   NUMSEQ            Int
@@ -6410,12 +7071,15 @@ model trocoturno {
   CODEMP            Int?
   CODCAIXA          Int?
   CODFUNC           Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
   contas            contas?   @relation(fields: [CODCONTA], references: [CODCONTA], onDelete: NoAction, onUpdate: NoAction, map: "FK_75")
   turnos            turnos    @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_76")
 
-  @@id([CODTURNO, NUMSEQ])
   @@index([CODCONTA], map: "FK_75")
+  @@index([CODTURNO], map: "FK_76")
   @@index([CODVENDA], map: "TROCOTURNO_CODVENDA")
+  @@ignore
 }
 
 model trocoturnoturno {
@@ -6437,6 +7101,8 @@ model trocoturnoturno {
   CODVENDA          Int?
   FLGLOG            String?   @db.VarChar(1)
   CODEMP            Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 
   @@id([CODTURNO, NUMSEQ])
 }
@@ -6457,47 +7123,51 @@ model turnos {
   VALORFINALTURNO       Float?
   REALDINHEIROTURNO     Float?
   DINHEIROTURNO         Float?
-  TURNOSPRODEXCLUIDOS   Float?
-  TROCOEMITIDOTURNO     Float?
-  NOTASTURNO            Float?
-  CHEQUESVISTATURNO     Float?
-  CHEQUESPRAZOTURNO     Float?
-  TICKETVALETURNO       Float?
-  VALEFRETETURNO        Float?
-  CARTAOCREDITOTURNO    Float?
-  AJUSTEENCERRANTETURNO Float?
-  ESCRITORIOTURNO       Float?
-  VAUCHERTURNO          Float?
-  VALESFUNCTURNO        Float?
-  COMISSAOTURNO         Float?
-  TROCODEIXADOTURNO     Float?
-  TROCORECEBIDOTURNO    Float?
-  SANGRIATURNO          Float?
-  DIFDESPESASTURNO      Float?
-  DIFENTRADASTURNO      Float?
-  VENDACOMBUSTURNO      Float?
-  VENDAPRODTURNO        Float?
-  EXCESSOCAIXATURNO     Float?
-  DEBITOFUNCTURNO       Float?
-  CREDITOFUNCTURNO      Float?
-  DIFCAIXA              Float?
-  VALESCLIENTETURNO     Float?
-  VALORDIFTURNO         Float?
-  RECCLIENTESTURNO      Float?
+  TURNOSPRODEXCLUIDOS   Float?            @db.Float
+  TROCOEMITIDOTURNO     Float?            @db.Float
+  NOTASTURNO            Float?            @db.Float
+  CHEQUESVISTATURNO     Float?            @db.Float
+  CHEQUESPRAZOTURNO     Float?            @db.Float
+  TICKETVALETURNO       Float?            @db.Float
+  VALEFRETETURNO        Float?            @db.Float
+  CARTAOCREDITOTURNO    Float?            @db.Float
+  AJUSTEENCERRANTETURNO Float?            @db.Float
+  ESCRITORIOTURNO       Float?            @db.Float
+  VAUCHERTURNO          Float?            @db.Float
+  VALESFUNCTURNO        Float?            @db.Float
+  COMISSAOTURNO         Float?            @db.Float
+  TROCODEIXADOTURNO     Float?            @db.Float
+  TROCORECEBIDOTURNO    Float?            @db.Float
+  SANGRIATURNO          Float?            @db.Float
+  DIFDESPESASTURNO      Float?            @db.Float
+  DIFENTRADASTURNO      Float?            @db.Float
+  VENDACOMBUSTURNO      Float?            @db.Float
+  VENDAPRODTURNO        Float?            @db.Float
+  EXCESSOCAIXATURNO     Float?            @db.Float
+  DEBITOFUNCTURNO       Float?            @db.Float
+  CREDITOFUNCTURNO      Float?            @db.Float
+  DIFCAIXA              Float?            @db.Float
+  VALESCLIENTETURNO     Float?            @db.Float
+  VALORDIFTURNO         Float?            @db.Float
+  RECCLIENTESTURNO      Float?            @db.Float
   FLGLOG                String?           @db.VarChar(1)
   CODEMP                Int?
+  CNTINSERT             Int?
+  CNTUPDATE             Int?
   funcionarios          funcionarios      @relation(fields: [CODFUNC], references: [CODFUNC], onDelete: NoAction, onUpdate: NoAction, map: "FK_77")
   abastturno            abastturno[]
   afericoes             afericoes[]
   difdespesas           difdespesas[]
   difencerrantes        difencerrantes?
   difentradas           difentradas[]
+  diffunc               diffunc[]
   excessocaixa          excessocaixa[]
   sangriacaixa          sangriacaixa[]
   sangriachtroco        sangriachtroco[]
   tanqueslmc            tanqueslmc[]
   totaisbicoturno       totaisbicoturno[]
-  trocoturno            trocoturno[]
+  trococheque           trococheque[]
+  trocoturno            trocoturno[]      @ignore
   valesfunc             valesfunc[]
 
   @@index([CODFUNC], map: "FK_77")
@@ -6520,16 +7190,20 @@ model turnospista {
   REALDINHEIROTURNO   Float?
   FLGLOG              String?   @db.VarChar(1)
   CODEMP              Int?
+  CNTINSERT           Int?
+  CNTUPDATE           Int?
 }
 
 model ufs {
-  SIGLAUF       String         @id @unique(map: "UFS0") @db.VarChar(2)
+  SIGLAUF       String         @id @db.VarChar(2)
   DSCUF         String         @db.VarChar(20)
   LOGINUSUARIO  String         @db.VarChar(20)
   DATAALTERACAO DateTime       @db.Date
   CODUF         String?        @db.VarChar(2)
   FLGLOG        String?        @db.VarChar(1)
   CODEMP        Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   aliquotasfcp  aliquotasfcp[]
   clientes      clientes[]
   empticket     empticket[]
@@ -6560,15 +7234,17 @@ model ultimosabast {
   LOG              String?   @db.VarChar(2)
   TIPO             String?   @db.VarChar(1)
   CODCAIXA         Int?
-  FLGLOG           String?   @db.VarChar(1)
-  DATAALTERACAO    DateTime? @db.Date
-  CODEMP           Int?
   TIPOABAST        String?   @db.VarChar(1)
   SEQMANUTENCDIA   Int
   NUMNOTA          Int?
+  FLGLOG           String?   @db.VarChar(1)
+  DATAALTERACAO    DateTime? @db.Date
+  CODEMP           Int?
   IMPRIMIRAUTO     String?   @db.VarChar(1)
   PRECOBOMBA       Float?
   TEMPSELECIONADO  String?   @db.VarChar(1)
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
   bicos            bicos     @relation(fields: [CODBICO], references: [CODBICO], onDelete: NoAction, onUpdate: NoAction, map: "FK_78")
 
   @@id([NUMABAST, CODABAST])
@@ -6583,6 +7259,8 @@ model unidades {
   FLGLOG        String?    @db.VarChar(1)
   CODEMP        Int?
   FLGFRACIONAR  String?    @db.VarChar(1)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   produtos      produtos[]
 }
 
@@ -6606,6 +7284,8 @@ model usuarios {
   CODEMP           Int?
   DATAALTERACAO    DateTime? @db.Date
   CONFIRMAR        String?   @db.VarChar(1)
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
 }
 
 model valescliente {
@@ -6621,6 +7301,8 @@ model valescliente {
   CODFUNC       Int?
   DATAALTERACAO DateTime? @db.Date
   CODVENDA      Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model valesfunc {
@@ -6634,6 +7316,8 @@ model valesfunc {
   FLGLOG        String?      @db.VarChar(1)
   CODEMP        Int?
   CODCAIXA      Int?
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
   turnos        turnos       @relation(fields: [CODTURNO], references: [CODTURNO], onDelete: NoAction, onUpdate: NoAction, map: "FK_79")
   funcionarios  funcionarios @relation(fields: [CODFUNC], references: [CODFUNC], onDelete: NoAction, onUpdate: NoAction, map: "FK_80")
 
@@ -6652,6 +7336,8 @@ model vauchers {
   CODVENDA        Int?
   FLGLOG          String?  @db.VarChar(1)
   CODEMP          Int?
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
   emptaxi         emptaxi  @relation(fields: [CODEMPTAXI], references: [CODEMPTAXI], onDelete: NoAction, onUpdate: NoAction, map: "FK_81")
 
   @@index([CODEMPTAXI], map: "FK_81")
@@ -6668,8 +7354,8 @@ model veiculos {
   DATAALTERACAO        DateTime  @db.Date
   CODCLIENTE           Int?
   CODBARRA             String?   @db.VarChar(20)
-  KMLITRO              Float?
-  VOLUMETANQUE         Float?
+  KMLITRO              Float?    @db.Float
+  VOLUMETANQUE         Float?    @db.Float
   CODPROD              String?   @db.VarChar(14)
   CODDEP               Int?
   CODEMP               Int?
@@ -6678,9 +7364,8 @@ model veiculos {
   TRIDCLIENTE          String?   @db.VarChar(10)
   DESATIVADO           String?   @db.VarChar(1)
   TRIDVALIDADE         DateTime? @db.Date
-  clientes             clientes? @relation(fields: [CODCLIENTE], references: [CODCLIENTE], onDelete: NoAction, onUpdate: NoAction, map: "FK_86")
-
-  @@index([CODCLIENTE], map: "FK_86")
+  CNTINSERT            Int?
+  CNTUPDATE            Int?
 }
 
 model vendacombuscaixa {
@@ -6699,6 +7384,8 @@ model vendacombuscaixa {
   ENCERRANTEINICIAL  Float?
   ENCERRANTE         Float?
   LOGINUSUARIO       String?   @db.VarChar(20)
+  CNTINSERT          Int?
+  CNTUPDATE          Int?
 
   @@id([DATACAIXA, CODBICO, CODEMP])
 }
@@ -6722,9 +7409,9 @@ model vendas {
   NFABECF          String?            @db.VarChar(20)
   LOG              String?            @db.VarChar(2)
   DATAMOVIMENTOZ   DateTime?          @db.Date
-  GERREM           String?            @db.VarChar(1)
   FLGLOG           String?            @db.VarChar(1)
   CODEMP           Int?
+  GERREM           String?            @db.VarChar(1)
   CODCAIXA         Int?
   SUBTOTALDESC     Decimal?           @db.Decimal(15, 2)
   NUMSERIED        Int?
@@ -6733,6 +7420,8 @@ model vendas {
   NUMNOTA          Int?
   TRIDCLIENTE      String?            @db.VarChar(10)
   MOTORISTA        String?            @db.VarChar(20)
+  CNTINSERT        Int?
+  CNTUPDATE        Int?
   caixas           caixas?            @relation(fields: [CODCAIXA], references: [CODCAIXA], onDelete: NoAction, onUpdate: NoAction, map: "FK_VENDAS_1")
   descvendacliente descvendacliente[]
   excessocaixa     excessocaixa[]
@@ -6755,6 +7444,8 @@ model vendaspremia {
   DATAVENDA     DateTime? @db.Date
   CODIGORESGATE Int?
   CARTAOPREMIA  String?   @db.VarChar(20)
+  CNTINSERT     Int?
+  CNTUPDATE     Int?
 }
 
 model vendasturno {
@@ -6776,9 +7467,9 @@ model vendasturno {
   NFABECF         String?   @db.VarChar(20)
   LOG             String?   @db.VarChar(2)
   DATAMOVIMENTOZ  DateTime? @db.Date
-  GERREM          String?   @db.VarChar(1)
   FLGLOG          String?   @db.VarChar(1)
   CODEMP          Int?
+  GERREM          String?   @db.VarChar(1)
   CODCAIXA        Int?
   SUBTOTALDESC    Decimal?  @db.Decimal(15, 2)
   NUMSERIED       Int?
@@ -6787,6 +7478,8 @@ model vendasturno {
   NUMNOTA         Int?
   TRIDCLIENTE     String?   @db.VarChar(10)
   MOTORISTA       String?   @db.VarChar(20)
+  CNTINSERT       Int?
+  CNTUPDATE       Int?
 }
 
 model vf {
@@ -6803,4 +7496,6 @@ model vf {
   FLGLOG            String?  @db.VarChar(1)
   CODEMP            Int?
   CODVENDA          Int?
+  CNTINSERT         Int?
+  CNTUPDATE         Int?
 }
